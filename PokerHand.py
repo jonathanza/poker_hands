@@ -55,4 +55,9 @@ class PokerHand:
             return "High Card"
 
     def __str__(self):
+        """
+        Return the string representation of the cards in the hand
+        :return: the string representation of the cards in the hand
+        :rtype: str
+        """
         return " ".join([f"{r}{s}" for r, s in self.cards])
