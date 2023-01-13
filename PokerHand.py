@@ -39,14 +39,3 @@ class PokerHand:
                 return "One Pair"
         else:
             return "High Card"
-
-
-cards = [
-    ("A", "spades"),
-    ("K", "spades"),
-    ("Q", "spades"),
-    ("J", "spades"),
-    ("10", "spades"),
-]
-hand = PokerHand(cards)
-print(hand.classify())  # Output: "Royal Flush"
