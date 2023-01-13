@@ -4,6 +4,11 @@ from typing import List, Tuple
 
 class PokerHand:
     def __init__(self, cards: List[Tuple[str, str]]):
+        """
+        Initializes a PokerHand instance with a list of cards represented as tuples of rank and suit.
+        :param cards: List of cards represented as tuples of rank and suit.
+        :type cards: List[Tuple[str, str]]
+        """
         self.cards: List[Tuple[str, str]] = cards
         self.ranks: List[int] = [
             int(r) if r.isdigit() else {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}[r]
@@ -17,6 +22,14 @@ class PokerHand:
         ) == 5
 
     def classify(self) -> str:
+        """
+        Classifies the PokerHand instance into one of the following categories:
+        'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind',
+        'Two Pair', 'One Pair', 'High Card'
+
+        :return: the classification of the PokerHand instance
+        :rtype: str
+        """
         if min(self.ranks) == 10 and self.is_flush and self.is_straight:
             return "Royal Flush"
         elif self.is_flush and self.is_straight:
