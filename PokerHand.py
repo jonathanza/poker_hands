@@ -53,3 +53,6 @@ class PokerHand:
                 return "One Pair"
         else:
             return "High Card"
+
+    def __str__(self):
+        return " ".join([f"{r}{s}" for r, s in self.cards])
