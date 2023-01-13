@@ -1,10 +1,17 @@
 import collections
 from typing import List, Tuple
+from enum import Enum
+
+
+class Rank(Enum):
+    T = 10
+    J = 11
+    Q = 12
+    K = 13
+    A = 14
 
 
 class PokerHand:
-    RANK_MAP = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
-
     def __init__(self, cards: List[Tuple[str, str]]):
         """
         Initializes a PokerHand instance with a list of cards represented as tuples of rank and suit.
@@ -13,7 +20,7 @@ class PokerHand:
         """
         self.cards: List[Tuple[str, str]] = cards
         self.ranks: List[int] = [
-            int(r) if r.isdigit() else PokerHand.RANK_MAP.get(r) for r, s in cards
+            int(r) if r.isdigit() else Rank[r].value for r, s in cards
         ]
         self.ranks.sort(reverse=True)
         self.suits: List[str] = [s for r, s in cards]
