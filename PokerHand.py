@@ -54,7 +54,7 @@ class PokerHand:
         else:
             return "High Card"
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return the string representation of the cards in the hand
         :return: the string representation of the cards in the hand
