@@ -1,6 +1,8 @@
 import collections
 from typing import List, Tuple
 
+RANK_MAP = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
+
 
 class PokerHand:
     def __init__(self, cards: List[Tuple[str, str]]):
@@ -11,8 +13,7 @@ class PokerHand:
         """
         self.cards: List[Tuple[str, str]] = cards
         self.ranks: List[int] = [
-            int(r) if r.isdigit() else {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}[r]
-            for r, s in cards
+            int(r) if r.isdigit() else RANK_MAP.get(r) for r, s in cards
         ]
         self.ranks.sort(reverse=True)
         self.suits: List[str] = [s for r, s in cards]
