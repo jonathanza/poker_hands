@@ -17,7 +17,7 @@ class PokerHand:
     classifying the hand, and returning a string representation of the cards in the hand.
     """
 
-    def __init__(self, cards: List[Tuple[str, str]]):
+    def __init__(self, cards: List[Tuple[str, str]]) -> None:
         """
         Initializes a PokerHand instance with a list of cards represented as tuples of rank and suit.
         :param cards: List of cards represented as tuples of rank and suit.
