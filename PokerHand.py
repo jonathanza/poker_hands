@@ -12,6 +12,11 @@ class Rank(Enum):
 
 
 class PokerHand:
+    """
+    A class representing a hand of poker cards. It includes methods for initializing the hand,
+    classifying the hand, and returning a string representation of the cards in the hand.
+    """
+
     def __init__(self, cards: List[Tuple[str, str]]):
         """
         Initializes a PokerHand instance with a list of cards represented as tuples of rank and suit.
