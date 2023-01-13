@@ -1,21 +1,22 @@
 import collections
+from typing import List, Tuple
 
 
 class PokerHand:
-    def __init__(self, cards):
-        self.cards = cards
-        self.ranks = [
+    def __init__(self, cards: List[Tuple[str, str]]):
+        self.cards: List[Tuple[str, str]] = cards
+        self.ranks: List[int] = [
             int(r) if r.isdigit() else {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}[r]
             for r, s in cards
         ]
         self.ranks.sort(reverse=True)
-        self.suits = [s for r, s in cards]
-        self.is_flush = len(set(self.suits)) == 1
-        self.is_straight = (max(self.ranks) - min(self.ranks) == 4) and len(
+        self.suits: List[str] = [s for r, s in cards]
+        self.is_flush: bool = len(set(self.suits)) == 1
+        self.is_straight: bool = (max(self.ranks) - min(self.ranks) == 4) and len(
             set(self.ranks)
         ) == 5
 
-    def classify(self):
+    def classify(self) -> str:
         if min(self.ranks) == 10 and self.is_flush and self.is_straight:
             return "Royal Flush"
         elif self.is_flush and self.is_straight:
