@@ -301,6 +301,38 @@ class TestPokerHand(unittest.TestCase):
                 hand = PokerHand(cards)
                 self.assertEqual(hand.classify(), "High Card")
 
+    def test_string_representation(self):
+        test_cases = [
+            [
+                ("A", "spades"),
+                ("K", "hearts"),
+                ("Q", "diamonds"),
+                ("J", "clubs"),
+                ("10", "spades"),
+                "A spades K hearts Q diamonds J clubs 10 spades",
+            ],
+            [
+                ("5", "hearts"),
+                ("9", "diamonds"),
+                ("2", "spades"),
+                ("6", "clubs"),
+                ("10", "hearts"),
+                "5 hearts 9 diamonds 2 spades 6 clubs 10 hearts",
+            ],
+            [
+                ("Q", "diamonds"),
+                ("J", "hearts"),
+                ("10", "spades"),
+                ("9", "clubs"),
+                ("8", "diamonds"),
+                "Q diamonds J hearts 10 spades 9 clubs 8 diamonds",
+            ],
+        ]
+        for i, cards in enumerate(test_cases):
+            with self.subTest(testcase=i):
+                hand = PokerHand(cards[0:5])
+                self.assertEqual(str(hand), cards[5])
+
 
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestPokerHand)
