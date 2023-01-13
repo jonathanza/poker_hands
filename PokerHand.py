@@ -4,7 +4,10 @@ import collections
 class PokerHand:
     def __init__(self, cards):
         self.cards = cards
-        self.ranks = [r for r, s in cards]
+        self.ranks = [
+            int(r) if r.isdigit() else {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}[r]
+            for r, s in cards
+        ]
         self.ranks.sort(reverse=True)
         self.suits = [s for r, s in cards]
         self.is_flush = len(set(self.suits)) == 1
@@ -13,11 +16,10 @@ class PokerHand:
         ) == 5
 
     def classify(self):
-        if self.is_flush and self.is_straight:
-            if min(self.ranks) == 10:
-                return "Royal Flush"
-            else:
-                return "Straight Flush"
+        if min(self.ranks) == 10 and self.is_flush and self.is_straight:
+            return "Royal Flush"
+        elif self.is_flush and self.is_straight:
+            return "Straight Flush"
         elif collections.Counter(self.ranks).most_common(1)[0][1] == 4:
             return "Four of a Kind"
         elif collections.Counter(self.ranks).most_common(2)[0][1] == 3:
