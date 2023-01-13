@@ -67,4 +67,4 @@ class PokerHand:
         :return: the string representation of the cards in the hand
         :rtype: str
         """
-        return " ".join([f"{r} {s}" for r, s in self.cards])
+        return " ".join(f"{r} {s}" for r, s in self.cards)
