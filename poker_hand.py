@@ -15,10 +15,15 @@ class Rank(Enum):
     """
 
     T = 10
+    TEN = 10
     J = 11
+    JACK = 11
     Q = 12
+    QUEEN = 12
     K = 13
+    KING = 13
     A = 14
+    ACE = 14
 
     def __init__(self, value: int) -> None:
         """
@@ -44,7 +49,7 @@ class PokerHand:
         """
         self.cards: List[Tuple[str, str]] = cards
         self.ranks: List[int] = [
-            int(r) if r.isdigit() else Rank[r].value for r, s in cards
+            int(r) if r.isdigit() else Rank[r.upper()].value for r, s in cards
         ]
         self.ranks.sort(reverse=True)
         self.suits: List[str] = [s for r, s in cards]
