@@ -1,9 +1,25 @@
+"""
+A class that contains test cases for the PokerHand class.
+It will test the classify method of the PokerHand class by providing test cases
+for various types of hands.
+"""
+
 import unittest
 from poker_hand import PokerHand
 
 
 class TestPokerHand(unittest.TestCase):
+    """
+    A class that contains test cases for the PokerHand class.
+    It will test the classify method of the PokerHand class by providing test
+    cases for various types of hands.
+    """
+
     def test_royal_flush(self):
+        """
+        Test case that asserts that the classify method returns 'Royal Flush'
+        when provided with a list of cards that make a royal flush hand.
+        """
         test_cases = [
             [
                 ("A", "spades"),
@@ -41,6 +57,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Royal Flush")
 
     def test_straight_flush(self):
+        """
+        Test case that asserts that the classify method returns 'Straight Flush'
+        when provided with a list of cards that make a straight flush hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -70,6 +90,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Straight Flush")
 
     def test_four_of_a_kind(self):
+        """
+        Test case that asserts that the classify method returns 'Four of a Kind'
+        when provided with a list of cards that make a four of a kind hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -99,6 +123,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Four of a Kind")
 
     def test_full_house(self):
+        """
+        Test case that asserts that the classify method returns 'Full House'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -128,6 +156,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Full House")
 
     def test_flush(self):
+        """
+        Test case that asserts that the classify method returns 'Flush'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -157,6 +189,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Flush")
 
     def test_straight(self):
+        """
+        Test case that asserts that the classify method returns 'Straight'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -186,6 +222,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Straight")
 
     def test_three_of_a_kind(self):
+        """
+        Test case that asserts that the classify method returns 'Three of a Kind'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -215,6 +255,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Three of a Kind")
 
     def test_two_pair(self):
+        """
+        Test case that asserts that the classify method returns 'Two Pair'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -244,6 +288,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "Two Pair")
 
     def test_one_pair(self):
+        """
+        Test case that asserts that the classify method returns 'One Pair'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -273,6 +321,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "One Pair")
 
     def test_high_card(self):
+        """
+        Test case that asserts that the classify method returns 'High Card'
+        when provided with a list of cards that make a full house hand.
+        """
         test_cases = [
             [
                 ("9", "spades"),
@@ -302,6 +354,10 @@ class TestPokerHand(unittest.TestCase):
                 self.assertEqual(hand.classify(), "High Card")
 
     def test_string_representation(self):
+        """
+        Test case that asserts that the __str__ method of the PokerHand class
+        returns the correct string representation of the cards in the hand.
+        """
         test_cases = [
             [
                 ("A", "spades"),
