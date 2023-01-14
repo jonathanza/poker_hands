@@ -4,11 +4,24 @@ from enum import Enum
 
 
 class Rank(Enum):
+    """
+    An enumeration class representing the ranks of cards in a poker hand.
+    The ranks are T, J, Q, K, and A, with corresponding values of 10, 11, 12, 13, and 14.
+    """
+
     T = 10
     J = 11
     Q = 12
     K = 13
     A = 14
+
+    def __init__(self, value: int) -> None:
+        """
+        Initializes a Rank instance with a value.
+        :param value: the value of the rank
+        :type value: int
+        """
+        self._value_ = value
 
 
 class PokerHand:
