@@ -57,18 +57,14 @@ The above attributes and steps performed during the `__init__` method will be us
 
 Classifies the `PokerHand` instance into one of the following categories: 'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind', 'Two Pair', 'One Pair', 'High Card'
 
-The classify method classifies the `PokerHand` instance into one of the following categories:
+Here is a step by step explanation of what the method does:
 
-- It creates a counter object of the ranks of the hand using `collections.Counter(self.ranks)`
-- It checks if the hand is both a flush and a straight, if so it checks if the minimum rank is 10, if so it returns "Royal Flush", otherwise it returns "Straight Flush"
-- It checks if the most common rank in the hand has a count of 4 using `counter.most_common(1)[0][1] == 4`, if so it returns "Four of a Kind"
-- It checks if the most common rank in the hand has a count of 3, if so it checks if the second most common rank has a count of 2, if so it returns "Full House", otherwise it returns "Three of a Kind"
-- If the previous conditions are not met, it checks if the hand is a flush, if so it returns "Flush"
-- If the previous conditions are not met, it checks if the hand is a straight, if so it returns "Straight"
-- If the previous conditions are not met, it checks if the most common rank in the hand has a count of 2, if so it checks if the second most common rank has a count of 2, if so it returns "Two Pair", otherwise it returns "One Pair"
-- If the previous conditions are not met, it returns "High Card"
-
-Note: The method uses the attributes of the class to check for certain conditions such as `self.is_flush`, `self.is_straight` and `self.ranks`.
+- The method starts by creating a `collections.Counter` object, `counter`, of the `self.ranks` attribute, which contains a list of integers representing the ranks of the cards in the hand.
+- Next, a dictionary, `conditions`, is defined that maps a tuple of conditions to the corresponding hand classification.
+- Then, the method uses a for loop to iterate over the items in the `conditions` dictionary. Each item is a tuple of conditions and a hand classification.
+- In the for loop, the method uses the `all()` function to check if all the conditions in the tuple of the current item are met. If the conditions are met, the corresponding hand classification is returned by the method.
+- If none of the conditions are met, the method return "High Card" as the default classification for any hand that does not match any other classification.
+- This way, the method goes through all the items in the conditions dictionary, checks if all the conditions in the tuple are met and returns the corresponding hand classification.
 
 #### `__str__() -> str`
 
