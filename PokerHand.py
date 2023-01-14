@@ -66,26 +66,23 @@ class PokerHand:
         if self.is_flush and self.is_straight:
             if min(self.ranks) == 10:
                 return "Royal Flush"
-            else:
-                return "Straight Flush"
-        elif counter.most_common(1)[0][1] == 4:
+            return "Straight Flush"
+        if counter.most_common(1)[0][1] == 4:
             return "Four of a Kind"
-        elif counter.most_common(2)[0][1] == 3:
+        if counter.most_common(2)[0][1] == 3:
             if counter.most_common(2)[1][1] == 2:
                 return "Full House"
-            else:
-                return "Three of a Kind"
-        elif self.is_flush:
+            return "Three of a Kind"
+        if self.is_flush:
             return "Flush"
-        elif self.is_straight:
+        if self.is_straight:
             return "Straight"
-        elif counter.most_common(2)[0][1] == 2:
+        if counter.most_common(2)[0][1] == 2:
             if counter.most_common(2)[1][1] == 2:
                 return "Two Pair"
-            else:
-                return "One Pair"
-        else:
-            return "High Card"
+            return "One Pair"
+        return "High Card"
+
 
     def __str__(self) -> str:
         """
