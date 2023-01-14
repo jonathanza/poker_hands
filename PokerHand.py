@@ -63,26 +63,27 @@ class PokerHand:
         :rtype: str
         """
         counter = collections.Counter(self.ranks)
-        if self.is_flush and self.is_straight:
-            if min(self.ranks) == 10:
-                return "Royal Flush"
-            return "Straight Flush"
-        if counter.most_common(1)[0][1] == 4:
-            return "Four of a Kind"
-        if counter.most_common(2)[0][1] == 3:
-            if counter.most_common(2)[1][1] == 2:
-                return "Full House"
-            return "Three of a Kind"
-        if self.is_flush:
-            return "Flush"
-        if self.is_straight:
-            return "Straight"
-        if counter.most_common(2)[0][1] == 2:
-            if counter.most_common(2)[1][1] == 2:
-                return "Two Pair"
-            return "One Pair"
+        conditions = {
+            (self.is_flush, self.is_straight, min(self.ranks) == 10): "Royal Flush",
+            (self.is_flush, self.is_straight): "Straight Flush",
+            (counter.most_common(1)[0][1] == 4,): "Four of a Kind",
+            (
+                counter.most_common(2)[0][1] == 3,
+                counter.most_common(2)[1][1] == 2,
+            ): "Full House",
+            (counter.most_common(2)[0][1] == 3,): "Three of a Kind",
+            (self.is_flush,): "Flush",
+            (self.is_straight,): "Straight",
+            (
+                counter.most_common(2)[0][1] == 2,
+                counter.most_common(2)[1][1] == 2,
+            ): "Two Pair",
+            (counter.most_common(2)[0][1] == 2,): "One Pair",
+        }
+        for condition, hand in conditions.items():
+            if all(condition):
+                return hand
         return "High Card"
-
 
     def __str__(self) -> str:
         """
