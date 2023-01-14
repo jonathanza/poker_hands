@@ -89,3 +89,28 @@ This project is licensed under the MIT License.
 ## Acknowledgments
 
 Thanks to OpenAI for providing the AI model that assisted in writing the documentation.
+
+## Meta
+
+### GitHub Description
+
+**Prompt**
+
+```text
+Suggest 10 short descriptions for the GitHub repo containing this code
+```
+
+**Response**
+
+```text
+A Python implementation of a Poker Hand classifier
+Classify poker hands with this Python module
+A poker hand classification tool written in Python
+Classify and represent poker hands in Python
+Python library for classifying and representing poker hands
+A comprehensive Python poker hand classifier
+Poker hand classification and representation in Python
+Python implementation of poker hand classification and representation
+A powerful tool for classifying poker hands using Python
+Python module for classifying and representing poker hands with ease
+```
