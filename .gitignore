@@ -1,3 +1,49 @@
+*.*~
+*.core
+
+### IDE, node, npm, bower, vagrant and terraform junk
+**/*.backup
+**/*.komodoproject
+**/*.kpf
+**/*.vagrant
+**/*.yarn
+**/.idea
+**/.komodo
+**/.terraform
+**/.trash
+**/.vscode
+**/bower_components
+**/node_modules
+**/npm-debug.log
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+### Other Junk Files ###
+$RECYCLE.BIN/
+*.bak
+*.log
+*.orig
+*.scssc
+*.swp
+.DS_Store
+.sass-cache
+.Spotlight-V100
+.Trashes
+Desktop.ini
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

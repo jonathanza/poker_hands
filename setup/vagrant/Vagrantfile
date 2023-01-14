@@ -1,0 +1,55 @@
+VAGRANTFILE_API_VERSION = 2
+Vagrant.require_version '>= 2.1.0'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = 'bento/ubuntu-22.04'
+
+  config.vm.network 'private_network', ip: '192.168.10.2'
+  config.vm.hostname = 'pokerhands.local'
+  config.goodhosts.remove_on_suspend = false
+  config.goodhosts.aliases = ['pokerhands.local']
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+    config.vbguest.installer_options = { allow_kernel_upgrade: true }
+    config.vbguest.iso_path = 'https://download.virtualbox.org/virtualbox/6.1.20/VBoxGuestAdditions_6.1.20.iso'
+  end
+
+  synced_folders = [{
+      local_path: '../../',
+      remote_path: '/srv/poker_hands',
+      create: true,
+      owner: 'vagrant',
+      group: 'vagrant',
+      type: 'virtualbox',
+      mount_options: ['dmode=775,fmode=644']
+  }]
+
+  config.vm.provider 'virtualbox' do | vb |
+    vb.gui = false
+    vb.memory = '1024'
+    vb.cpus = '1'
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+
+    synced_folders.each do |folder|
+      if File.directory?(File.expand_path(folder[:local_path]))
+        config.vm.synced_folder folder[:local_path],
+                                folder[:remote_path],
+                                owner: folder[:owner],
+                                group: folder[:group],
+                                create: folder[:create],
+                                type: folder[:type],
+                                mount_options: folder[:mount_options]
+      end
+    end
+  end
+
+  config.vm.provision 'shell', inline: <<-SHELL\
+    # apt-get clean && apt update && apt upgrade -y && apt autoremove -y
+    pro config set apt_news=false
+    sudo apt-get update
+    sudo apt-get install -y python3-pip python3-venv
+    python3 -m pip install --user pipx
+    python3 -m pipx ensurepath
+  SHELL
+end
