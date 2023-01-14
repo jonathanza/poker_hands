@@ -56,14 +56,16 @@ class PokerHand:
         :return: the classification of the PokerHand instance
         :rtype: str
         """
-        if min(self.ranks) == 10 and self.is_flush and self.is_straight:
-            return "Royal Flush"
-        elif self.is_flush and self.is_straight:
-            return "Straight Flush"
-        elif collections.Counter(self.ranks).most_common(1)[0][1] == 4:
+        counter = collections.Counter(self.ranks)
+        if self.is_flush and self.is_straight:
+            if min(self.ranks) == 10:
+                return "Royal Flush"
+            else:
+                return "Straight Flush"
+        elif counter.most_common(1)[0][1] == 4:
             return "Four of a Kind"
-        elif collections.Counter(self.ranks).most_common(2)[0][1] == 3:
-            if collections.Counter(self.ranks).most_common(2)[1][1] == 2:
+        elif counter.most_common(2)[0][1] == 3:
+            if counter.most_common(2)[1][1] == 2:
                 return "Full House"
             else:
                 return "Three of a Kind"
@@ -71,8 +73,8 @@ class PokerHand:
             return "Flush"
         elif self.is_straight:
             return "Straight"
-        elif collections.Counter(self.ranks).most_common(2)[0][1] == 2:
-            if collections.Counter(self.ranks).most_common(2)[1][1] == 2:
+        elif counter.most_common(2)[0][1] == 2:
+            if counter.most_common(2)[1][1] == 2:
                 return "Two Pair"
             else:
                 return "One Pair"
