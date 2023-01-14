@@ -141,6 +141,51 @@ The `__str__` method of the `PokerHand` class returns a string representation of
 
 This method allows to represent the cards in the hand in a human readable format.
 
+## Development Environment
+
+### Initialise Python Virtual Environment
+
+```bash
+pipenv --python /usr/bin/python3
+cd /srv/poker_hands/
+rm -rf /srv/poker_hands/.venv
+mkdir /srv/poker_hands/.venv
+pipenv install --skip-lock --dev --pre
+pipenv shell
+```
+
+### Lint Code
+
+#### Black
+
+https://pypi.org/project/black/
+
+```bash
+cd /srv/poker_hands/
+pipenv shell
+black -v *.py
+```
+
+#### isort
+
+https://pypi.org/project/isort/
+
+```bash
+cd /srv/poker_hands/
+pipenv shell
+isort *.py
+```
+
+#### Pylint
+
+https://pypi.org/project/pylint/
+
+```bash
+cd /srv/poker_hands/
+pipenv shell
+pylint *.py
+```
+
 ## Contributing
 
 If you have any suggestions or find any bugs, please feel free to open an issue or submit a pull request.
