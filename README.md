@@ -19,19 +19,82 @@ To use the `PokerHand` class, you'll need to have Python installed on your machi
 
 ## Usage
 
-To use the `PokerHand` class, you'll first need to import it:
+### Programmatic
+
+This module defines a `PokerHand` class that represents a hand of poker cards and various methods to classify and represent the cards in the hand.
+
+To use the module, you need to first import it. Then you can create an instance of the `PokerHand` class by providing a list of cards represented as tuples of rank and suit.
+
+For example:
 
 ```python
-from poker_hand import PokerHand
+from poker import PokerHand
+cards = [("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")]
+hand = PokerHand(cards)
 ```
 
-Then you can create a new instance of the class and classify a poker hand by calling the classify() method on an instance of the class, passing in a list of cards represented as tuples of rank and suit.
+You can use the `classify()` method on the hand object to classify the hand into one of the following categories: 'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind', 'Two Pair', 'One Pair', 'High Card'
+
+For example:
 
 ```python
-cards = [("A", "Clubs"), ("K", "Clubs"), ("Q", "Clubs"), ("J", "Clubs"), ("T", "Clubs")]
-poker_hand = PokerHand(cards)
-print(poker_hand.classify()) # "Royal Flush"
-print(poker_hand) # "A Clubs K Clubs Q Clubs J Clubs T Clubs"
+print(hand.classify())
+```
+
+You can also use the `__str__()` method to get the string representation of the cards in the hand:
+
+```python
+print(hand)
+```
+
+You can also access the following attributes of the hand object:
+
+- `cards`: a list of cards represented as tuples of rank and suit
+- `ranks`: a list of integers representing the ranks of the cards
+- `suits`: a list of strings representing the suits of the cards
+- `is_flush`: a boolean indicating if the hand is a flush
+- `is_straight`: a boolean indicating if the hand is a straight
+
+For example:
+
+```python
+print(hand.cards)
+print(hand.ranks)
+print(hand.suits)
+print(hand.is_flush)
+print(hand.is_straight)
+```
+
+Note that the cards are represented as a tuple of rank and suit, where the rank is represented as a string (with possible values T, J, Q, K, A) and the suit is represented as a single character string (with possible values H, D, S, C).
+
+### CLI
+
+This script is a command-line interface (CLI) that allows you to classify a poker hand by inputting cards into the terminal.
+
+To use the script, you will need to have python3 and the rich library installed in your system.
+
+You can run the script by navigating to the directory where the script is located in your terminal and typing:
+
+```bash
+python3 poker_cli.py
+```
+
+The script will prompt you to enter 5 cards in the format "rank suit" (e.g. "ace hearts").
+You can enter the cards one at a time and press enter after each card.
+The script will check if the cards are valid, and if not will prompt you to enter the card again.
+
+Once you have entered 5 valid cards, it will classify the hand and display the result on the console, including the string representation of the cards in the hand and the classification of the hand.
+
+For example:
+
+```bash
+Enter a card in the format 'rank suit': ace hearts
+Enter a card in the format 'rank suit': king hearts
+Enter a card in the format 'rank suit': queen hearts
+Enter a card in the format 'rank suit': jack hearts
+Enter a card in the format 'rank suit': 10 hearts
+Hand: Ace of Hearts King of Hearts Queen of Hearts Jack of Hearts 10 of Hearts
+Classification: Royal Flush
 ```
 
 ## Class Methods
