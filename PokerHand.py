@@ -1,3 +1,8 @@
+"""
+A class representing a hand of poker cards. It includes methods for initializing the hand,
+classifying the hand, and returning a string representation of the cards in the hand.
+"""
+
 import collections
 from typing import List, Tuple
 from enum import Enum
@@ -32,7 +37,8 @@ class PokerHand:
 
     def __init__(self, cards: List[Tuple[str, str]]) -> None:
         """
-        Initializes a PokerHand instance with a list of cards represented as tuples of rank and suit.
+        Initializes a PokerHand instance with a list of cards represented as
+        tuples of rank and suit.
         :param cards: List of cards represented as tuples of rank and suit.
         :type cards: List[Tuple[str, str]]
         """
@@ -50,8 +56,8 @@ class PokerHand:
     def classify(self) -> str:
         """
         Classifies the PokerHand instance into one of the following categories:
-        'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind',
-        'Two Pair', 'One Pair', 'High Card'
+        'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush',
+        'Straight', 'Three of a Kind', 'Two Pair', 'One Pair', 'High Card'
 
         :return: the classification of the PokerHand instance
         :rtype: str
