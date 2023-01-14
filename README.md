@@ -28,10 +28,10 @@ from PokerHand import PokerHand
 Then you can create a new instance of the class and classify a poker hand by calling the classify() method on an instance of the class, passing in a list of cards represented as tuples of rank and suit.
 
 ```python
-cards = [("A", "C"), ("K", "C"), ("Q", "C"), ("J", "C"), ("T", "C")]
+cards = [("A", "Clubs"), ("K", "Clubs"), ("Q", "Clubs"), ("J", "Clubs"), ("T", "Clubs")]
 poker_hand = PokerHand(cards)
 print(poker_hand.classify()) # "Royal Flush"
-print(poker_hand) # "AC KC QC JC TC"
+print(poker_hand) # "A Clubs K Clubs Q Clubs J Clubs T Clubs"
 ```
 
 ## Class Methods
@@ -40,43 +40,43 @@ print(poker_hand) # "AC KC QC JC TC"
 
 Initializes a PokerHand instance with a list of cards represented as tuples of rank and suit.
 
-The **init** method in the PokerHand class is used to initialize an instance of the PokerHand class when it is created. It is called automatically when a new instance of the class is created and is used to set up the initial state of the object.
+The `__init__` method of the `PokerHand` class initializes an instance of the class with a list of cards represented as tuples of rank and suit. This method performs the following steps:
 
-The method takes one argument, cards, which is a list of tuples representing the cards in the hand. Each tuple contains a string representing the rank of the card and a string representing the suit of the card.
+- It sets `self.cards` as the input list of cards represented as tuples of rank and suit.
+- It creates a list `self.ranks` by converting the rank of each card to an integer if it is a digit, otherwise it uses the value of the corresponding enumeration defined in the `Rank` class.
+- It sorts the `self.ranks` list in descending order.
+- It creates a list `self.suits` by extracting the suit of each card.
+- It sets `self.is_flush` as `True` if all the suits in `self.suits` are the same, otherwise `False`.
+- It sets `self.is_straight` as `True` if the difference between the maximum and minimum rank in `self.ranks` is 4 and the length of the set of `self.ranks` is 5. It sets `self.is_straight` as `False` otherwise.
 
-The method assigns the cards argument to the self.cards attribute of the instance. It then uses a list comprehension to create a new list self.ranks which contains the integer value of the rank of each card, or the value in the RANK_MAP dictionary if the rank is not a digit. The list comprehension sorts the ranks in descending order.
-
-The method then creates another list comprehension, self.suits which contains the suits of each card.
-
-It then checks if the length of the set of suits is 1, if it is, then it assigns the value True to self.is_flush attribute. If not, it assigns False. It also checks if the max(self.ranks) - min(self.ranks) == 4) and the length of set(self.ranks) == 5, if it is true, it assigns the value True to self.is_straight attribute, otherwise False.
-
-In summary, the **init** method sets up the initial state of the PokerHand instance by assigning the cards argument to the self.cards attribute, creating the self.ranks and self.suits attributes, and setting the self.is_flush and self.is_straight attributes based on the cards in the hand.
+The above attributes and steps performed during the `__init__` method will be used to classify the hand of poker in the `classify` method.
 
 ### `classify() -> str`
 
 Classifies the PokerHand instance into one of the following categories: 'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind', 'Two Pair', 'One Pair', 'High Card'
 
-The classify method in the PokerHand class is used to classify a hand of poker based on the cards it contains. The method first checks if the hand is a "Royal Flush" by checking if the minimum rank is 10, the hand is a flush, and the hand is a straight. If this is true, it returns the string "Royal Flush". If not, it then checks if the hand is a "Straight Flush" by checking if the hand is both a flush and a straight. If this is true, it returns the string "Straight Flush".
+The `classify` method of the `PokerHand` class classifies an instance of the class into one of the following categories:
 
-The method then uses the collections.Counter method to check the number of occurrences of each rank in the hand and uses this information to determine if the hand is a "Four of a Kind", "Full House", "Three of a Kind", "Two Pair", "One Pair", or "High Card".
-
-If the most common rank has a count of 4, the method returns "Four of a Kind". If the most common rank has a count of 3 and the second most common rank has a count of 2, the method returns "Full House". If the most common rank has a count of 3 and the second most common rank does not have a count of 2, the method returns "Three of a Kind".
-
-If the hand is a flush and not a straight, the method returns "Flush". If the hand is a straight and not a flush, the method returns "Straight". If the most common rank has a count of 2 and the second most common rank also has a count of 2, the method returns "Two Pair". If the most common rank has a count of 2 and the second most common rank does not have a count of 2, the method returns "One Pair".
-
-If none of these conditions are met, the method returns "High Card".
+- It checks if the minimum rank in `self.ranks` is 10, `self.is_flush` is `True` and `self.is_straight` is `True`. If so, it returns "Royal Flush"
+- It checks if `self.is_flush` is `True` and self.is_straight is `True`. If so, it returns "Straight Flush"
+- It checks if the most common rank in `self.ranks` occurs 4 times, using `collections.Counter(self.ranks).most_common(1)[0][1] == 4`. If so, it returns "Four of a Kind"
+- It checks if the most common rank in `self.ranks` occurs 3 times, using `collections.Counter(self.ranks).most_common(2)[0][1] == 3`. If so, it checks if the second most common rank occurs 2 times. If so, it returns "Full House", otherwise it returns "Three of a Kind"
+- It checks if `self.is_flush` is `True`. If so, it returns "Flush"
+- It checks if `self.is_straight` is `True`. If so, it returns "Straight"
+- It checks if the most common rank in `self.ranks` occurs 2 times, using `collections.Counter(self.ranks).most_common(2)[0][1] == 2`. If so, it checks if the second most common rank occurs 2 times. If so, it returns "Two Pair", otherwise it returns "One Pair"
+- If none of the above conditions are met, it returns "High Card"
 
 ### `__str__() -> str`
 
 Returns the cards in the hand as a string.
 
-The **str** method in the PokerHand class is used to provide a string representation of the hand. This method is called when the print() function is called on an instance of the PokerHand class.
+The `__str__` method of the PokerHand class returns a string representation of the cards in the hand. This method performs the following steps:
 
-The method first creates a list comprehension that iterates over the self.cards attribute of the PokerHand instance and formats each card as a string in the format "RankSuit" (e.g. "AH" for an Ace of Hearts).
+- It uses a list comprehension to create a list of strings, where each string is a combination of the rank and suit of a card in the format of "rank suit".
+- It uses the `join` method to join the list of strings created in step 1 with a space separator, creating a single string containing all the cards in the hand.
+- It returns this final string.
 
-It then uses the join() method to concatenate all of the formatted card strings in the list comprehension with a space as the separator. Finally, the method returns the concatenated string.
-
-In summary, this method converts the cards attribute of the class into a string representation of the card in the format "RankSuit" with space as separator and return that string representation.
+This method allows to represent the cards in the hand in a human readable format.
 
 ## Contributing
 
