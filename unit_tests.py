@@ -1,5 +1,5 @@
 import unittest
-from PokerHand import PokerHand
+from poker_hand import PokerHand
 
 
 class TestPokerHand(unittest.TestCase):
