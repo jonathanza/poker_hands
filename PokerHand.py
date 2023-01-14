@@ -4,8 +4,8 @@ classifying the hand, and returning a string representation of the cards in the 
 """
 
 import collections
-from typing import List, Tuple
 from enum import Enum
+from typing import List, Tuple
 
 
 class Rank(Enum):
