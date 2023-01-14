@@ -1,9 +1,6 @@
-import sys
 from typing import List, Tuple
 
 from rich.console import Console
-from rich.prompt import Prompt
-from rich.table import Table
 
 from poker_hand import PokerHand
 
@@ -24,10 +21,10 @@ VALID_RANKS = {
 }
 VALID_SUITS = {"hearts", "diamonds", "clubs", "spades"}
 
-console = Console()
+console: Console = Console()
 
 
-def get_cards():
+def get_cards() -> List[Tuple[str, str]]:
     cards = []
     while len(cards) < 5:
         try:
@@ -48,7 +45,7 @@ def get_cards():
     return cards
 
 
-def main():
+def main() -> None:
     cards = get_cards()
     hand = PokerHand(cards)
     classification = hand.classify()
