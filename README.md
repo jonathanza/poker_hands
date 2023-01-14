@@ -22,7 +22,7 @@ To use the `PokerHand` class, you'll need to have Python installed on your machi
 To use the `PokerHand` class, you'll first need to import it:
 
 ```python
-from PokerHand import PokerHand
+from poker_hand import PokerHand
 ```
 
 Then you can create a new instance of the class and classify a poker hand by calling the classify() method on an instance of the class, passing in a list of cards represented as tuples of rank and suit.
