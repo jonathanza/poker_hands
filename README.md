@@ -1,5 +1,7 @@
 # PokerHand Class
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/53ae48d1931949baa8e1dd1855ea364e)](https://app.codacy.com/gh/jonathanza/poker_hands?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Grade_Settings)
+
 The `PokerHand` class is a Python class that can be used to classify a poker hand into one of the following categories:
 
 - 'Royal Flush'
