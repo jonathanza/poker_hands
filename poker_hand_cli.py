@@ -51,8 +51,8 @@ def get_cards() -> List[Tuple[str, str]]:
             if card[1] not in VALID_SUITS:
                 raise ValueError(f"Invalid suit value. Valid values are: {VALID_SUITS}")
             cards.append(card)
-        except ValueError as e:
-            console.print(e)
+        except ValueError as error:
+            console.print(error)
     return cards
 
 
