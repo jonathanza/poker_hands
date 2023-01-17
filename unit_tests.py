@@ -312,8 +312,8 @@ class TestPokerHand(unittest.TestCase):
                 ("Q", "diamonds"),
                 ("Q", "hearts"),
                 ("J", "spades"),
-                ("8", "clubs"),
-                ("2", "diamonds"),
+                ("3", "clubs"),
+                ("4", "diamonds"),
             ],
         ]
         for i, cards in enumerate(test_cases):
@@ -344,7 +344,7 @@ class TestPokerHand(unittest.TestCase):
             [
                 ("Q", "diamonds"),
                 ("K", "hearts"),
-                ("J", "spades"),
+                ("J", "hearts"),
                 ("8", "clubs"),
                 ("2", "diamonds"),
             ],
