@@ -158,9 +158,7 @@ pipenv shell
 
 ### Lint Code
 
-#### Black
-
-https://pypi.org/project/black/
+#### [Black](https://pypi.org/project/black/)
 
 ```bash
 cd /srv/poker_hands/
@@ -168,9 +166,7 @@ pipenv shell
 black -v *.py
 ```
 
-#### isort
-
-https://pypi.org/project/isort/
+#### [isort](https://pypi.org/project/isort/)
 
 ```bash
 cd /srv/poker_hands/
@@ -178,9 +174,7 @@ pipenv shell
 isort *.py
 ```
 
-#### Pylint
-
-https://pypi.org/project/pylint/
+#### [Pylint](https://pypi.org/project/pylint/)
 
 ```bash
 cd /srv/poker_hands/
