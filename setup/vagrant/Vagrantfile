@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       owner: 'vagrant',
       group: 'vagrant',
       type: 'virtualbox',
-      mount_options: ['dmode=775,fmode=644']
+      mount_options: ['dmode=775,fmode=775']
   }]
 
   config.vm.provider 'virtualbox' do | vb |
