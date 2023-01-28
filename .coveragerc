@@ -1,0 +1,16 @@
+[run]
+
+include =
+    poker_*.py
+
+omit =
+    */__init__.py
+    */tests/*
+    */venv/*
+
+[report]
+exclude_lines =
+    raise NotImplementedError
+    return NotImplemented
+    return None
+    pass

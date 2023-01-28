@@ -10,6 +10,7 @@ rich = "*"
 black = "*"
 pylint = "*"
 isort = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.10"
