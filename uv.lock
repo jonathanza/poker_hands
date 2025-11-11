@@ -275,7 +275,7 @@ wheels = [
 
 [[package]]
 name = "poker-hands"
-version = "2.0.0b2"
+version = "2.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "rich" },
