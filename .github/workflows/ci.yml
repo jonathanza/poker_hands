@@ -31,7 +31,7 @@ jobs:
       run: pip install pipenv
 
     - name: Install dependencies
-      run: pipenv install --dev --skip-lock --pre
+      run: pipenv install --python $(which python) --dev --skip-lock --pre
 
     - name: Check code formatting with Black
       run: pipenv run black --check -v *.py
@@ -70,7 +70,7 @@ jobs:
       run: pip install pipenv
 
     - name: Install dependencies
-      run: pipenv install --dev --skip-lock --pre
+      run: pipenv install --python $(which python) --dev --skip-lock --pre
 
     - name: Run unit tests
       run: pipenv run python -m unittest unit_tests.py
@@ -124,7 +124,7 @@ jobs:
       run: pip install pipenv
 
     - name: Install dependencies
-      run: pipenv install --skip-lock --pre
+      run: pipenv install --python $(which python) --skip-lock --pre
 
     - name: Test CLI imports and basic functionality
       run: |
