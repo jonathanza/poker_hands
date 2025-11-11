@@ -1,6 +1,6 @@
 [project]
 name = "poker-hands"
-version = "2.0.0-beta.1"
+version = "2.0.0-beta.2"
 description = "A Python poker hand classifier with CLI interface"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -11,42 +11,83 @@ This is a Python poker hand classifier that can classify poker hands into catego
 ### Environment Setup
 
 ```bash
-# Initialize Python virtual environment with pipenv
-pipenv --python /usr/bin/python3
-pipenv install --skip-lock --dev --pre
-pipenv shell
+# Install uv (one-time setup)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Or via pip: pip install uv
+
+# Install dependencies (creates .venv automatically)
+uv sync --dev
 ```
 
 ### Running Tests
 
 ```bash
 # Run unit tests
-python -m unittest unit_tests.py
+uv run python -m unittest unit_tests.py
 
 # Run tests with coverage
-coverage run -m unittest unit_tests.py
+uv run coverage run -m unittest unit_tests.py
+
+# Generate coverage report
+uv run coverage report
 
 # Generate coverage XML report (for Codacy)
-coverage xml -o coverage.xml
+uv run coverage xml -o coverage.xml
+
+# Check coverage threshold (90% minimum)
+uv run coverage report --fail-under=90
 ```
 
-### Linting
+### Linting & Formatting
 
 ```bash
-# Format code with Black
-black -v *.py
+# Format code with ruff
+uv run ruff format *.py
 
-# Sort imports with isort
-isort *.py
+# Lint and auto-fix with ruff
+uv run ruff check --fix *.py
 
-# Lint with Pylint
-pylint *.py
+# Lint only (no fixes)
+uv run ruff check *.py
+
+# Combined workflow (format + lint)
+uv run ruff format *.py && uv run ruff check --fix *.py
+```
+
+### Pre-commit Hooks
+
+```bash
+# Install pre-commit hooks (one-time setup)
+pip install pre-commit
+pre-commit install
+
+# Run hooks manually
+pre-commit run --all-files
 ```
 
 ### Running the CLI
 
 ```bash
-python3 poker_hand_cli.py
+uv run python poker_hand_cli.py
+```
+
+### Dependency Management
+
+```bash
+# Add a new dependency
+uv add <package>
+
+# Add a development dependency
+uv add --dev <package>
+
+# Remove a dependency
+uv remove <package>
+
+# Update dependencies
+uv lock --upgrade
+
+# Show installed packages
+uv pip list
 ```
 
 ## Code Architecture
@@ -73,8 +114,18 @@ Example: `[("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")]`
 
 ## Test Coverage Requirements
 
-Per global CLAUDE.md configuration:
 - Minimum 80% coverage per file
 - Minimum 90% coverage overall
 
-Coverage configuration in `.coveragerc` includes only `poker_*.py` files and excludes `__init__.py`, tests, and venv directories.
+Coverage configuration in `pyproject.toml` (`[tool.coverage]` section) includes only `poker_*.py` files and excludes `__init__.py`, tests, and venv directories.
+
+## Tooling
+
+This project uses modern Python tooling:
+- **uv**: Fast Python package installer and resolver (replaces pipenv)
+- **ruff**: Extremely fast Python linter and formatter (replaces black, isort, pylint)
+- **pre-commit**: Git hooks for automatic code quality checks
+- **coverage**: Code coverage measurement
+- **GitHub Actions**: CI/CD for automated testing
+
+See [ROADMAP.md](./ROADMAP.md) for the project vision and future plans.

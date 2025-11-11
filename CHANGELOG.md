@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-beta.2] - 2025-11-11
+
+### Added
+- **Project roadmap** (ROADMAP.md) documenting vision through Phase 9
+  - FastAPI backend (v3.0.0)
+  - Web interface (v3.1.0)
+  - Terminal UI with Textual (v3.2.0)
+  - Advanced features roadmap (v4.0.0+)
+- **Updated TODO.md** with Phase 3 focus and migration guide
+- **uv.lock** file for reproducible builds
+
+### Changed
+
+#### Dependency Management (BREAKING CHANGE)
+- **Migrated from pipenv to uv** (10-100x faster)
+  - Removed Pipfile and Pipfile.lock
+  - All dependencies now managed via pyproject.toml
+  - Lock file: uv.lock (committed for reproducibility)
+  - Virtual environment: .venv (auto-created by uv)
+
+#### CI/CD Updates
+- **Updated GitHub Actions workflows** to use uv
+  - Install uv via official installer script
+  - Use `uv sync` for dependency installation
+  - Use `uv run` for all command execution
+  - Updated caching strategy for uv packages
+  - Faster CI execution (seconds vs minutes)
+
+#### Documentation
+- **Updated CLAUDE.md** with uv workflow
+  - New commands for dependency management
+  - Updated testing and linting workflows
+  - Added tooling overview section
+- **Added placeholder dependency groups** in pyproject.toml
+  - api: FastAPI, uvicorn, pydantic (Phase 5)
+  - tui: textual, rich (Phase 7)
+
+### Removed
+- **Pipfile** and **Pipfile.lock** (replaced by uv.lock)
+- Pipenv dependency and all pipenv commands
+
+### Developer Impact
+- **Breaking Change**: Must use uv instead of pipenv
+  - Install: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+  - Setup: `uv sync --dev` (replaces `pipenv install --dev`)
+  - Run: `uv run <command>` (replaces `pipenv run <command>`)
+- **Faster workflow**: 10-100x faster dependency installation
+- **No shell activation needed**: Use `uv run` directly
+
+### Migration Notes
+Completed Phase 3 of modernization plan:
+- ✅ Migrated to uv for dependency management
+- ✅ Updated all CI/CD workflows
+- ✅ Updated documentation
+- ✅ Removed pipenv dependencies
+
 ## [2.0.0-beta.1] - 2025-11-11
 
 ### Added
