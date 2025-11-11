@@ -1,0 +1,66 @@
+[project]
+name = "poker-hands"
+version = "2.0.0-beta.1"
+description = "A Python poker hand classifier with CLI interface"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["poker", "card-games", "classifier", "poker-hands"]
+authors = [
+    {name = "Jonathan Marshall"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "rich>=13.3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8.0",
+    "coverage>=7.1.0",
+    "pre-commit>=3.0.0",
+]
+
+[tool.ruff]
+# Same line length as black default
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+# Start with a conservative set of rules
+select = [
+    "E",    # pycodestyle errors
+    "F",    # Pyflakes
+    "I",    # isort
+]
+
+# isort-compatible settings
+isort.known-first-party = ["poker_hand", "poker_hand_cli"]
+
+[tool.ruff.format]
+# Format settings compatible with black
+quote-style = "double"
+indent-style = "space"
+
+[tool.coverage.run]
+include = ["poker_*.py"]
+omit = ["*/__init__.py", "*/tests/*", "*/venv/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "raise NotImplementedError",
+    "return NotImplemented",
+    "return None",
+    "pass",
+]

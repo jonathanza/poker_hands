@@ -1,6 +1,6 @@
 # PokerHand Class
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ec8a9ce37ca748f9b4226da7dd5efff9)](https://www.codacy.com/gh/jonathanza/poker_hands/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ec8a9ce37ca748f9b4226da7dd5efff9)](https://www.codacy.com/gh/jonathanza/poker_hands/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Coverage)
+[![CI](https://github.com/jonathanza/poker_hands/actions/workflows/ci.yml/badge.svg)](https://github.com/jonathanza/poker_hands/actions/workflows/ci.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ec8a9ce37ca748f9b4226da7dd5efff9)](https://www.codacy.com/gh/jonathanza/poker_hands/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ec8a9ce37ca748f9b4226da7dd5efff9)](https://www.codacy.com/gh/jonathanza/poker_hands/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Coverage)
 
 The `PokerHand` class is a Python class that can be used to classify a poker hand into one of the following categories:
 

@@ -1,6 +1,7 @@
 """
-A class representing a hand of poker cards. It includes methods for initializing the hand,
-classifying the hand, and returning a string representation of the cards in the hand.
+A class representing a hand of poker cards. It includes methods for
+initializing the hand, classifying the hand, and returning a string
+representation of the cards in the hand.
 """
 
 import collections
@@ -11,7 +12,8 @@ from typing import List, Tuple
 class Rank(Enum):
     """
     An enumeration class representing the ranks of cards in a poker hand.
-    The ranks are T, J, Q, K, and A, with corresponding values of 10, 11, 12, 13, and 14.
+    The ranks are T, J, Q, K, and A, with corresponding values of
+    10, 11, 12, 13, and 14.
     """
 
     T = 10
@@ -36,8 +38,9 @@ class Rank(Enum):
 
 class PokerHand:
     """
-    A class representing a hand of poker cards. It includes methods for initializing the hand,
-    classifying the hand, and returning a string representation of the cards in the hand.
+    A class representing a hand of poker cards. It includes methods for
+    initializing the hand, classifying the hand, and returning a string
+    representation of the cards in the hand.
     """
 
     def __init__(self, cards: List[Tuple[str, str]]) -> None:
