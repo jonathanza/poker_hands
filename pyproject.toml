@@ -26,11 +26,33 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Development dependencies
 dev = [
     "ruff>=0.8.0",
     "coverage>=7.1.0",
     "pre-commit>=3.0.0",
 ]
+
+# API dependencies (Phase 5 - v3.0.0)
+# Uncomment when implementing FastAPI backend
+# api = [
+#     "fastapi>=0.104.0",
+#     "uvicorn[standard]>=0.24.0",
+#     "pydantic>=2.0.0",
+#     "python-multipart>=0.0.6",
+# ]
+
+# TUI dependencies (Phase 7 - v3.2.0)
+# Uncomment when implementing Terminal UI
+# tui = [
+#     "textual>=0.40.0",
+#     "rich>=13.3.1",  # Already in main deps, but explicit for TUI
+# ]
+
+# All optional dependencies combined
+# all = [
+#     "poker-hands[dev,api,tui]",
+# ]
 
 [tool.ruff]
 # Same line length as black default
