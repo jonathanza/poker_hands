@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Comprehensive GitHub Actions workflows** for automated testing and quality assurance
   - `ci.yml`: Multi-job workflow with linting, testing, and coverage reporting
   - `autoformat.yml`: Automatic code formatting on pull requests
-- **Multi-version Python testing** across Python 3.8, 3.9, 3.10, 3.11, and 3.12
+- **Multi-version Python testing** across Python 3.10, 3.11, 3.12, and 3.13 (current supported versions)
 - **Coverage enforcement** with 90% minimum threshold
 - **CLI smoke tests** to validate basic functionality in CI
 - **Codacy integration** for automated code quality and coverage reporting
@@ -42,8 +42,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Compatible with black/isort formatting standards
 - **Centralized configuration** in `pyproject.toml`
   - Moved coverage configuration from `.coveragerc` to `pyproject.toml`
-  - Ruff configuration (line-length: 88, target: py38)
+  - Ruff configuration (line-length: 88, target: py310)
   - Tool settings now in standard location
+
+#### Python Version Support (BREAKING CHANGE)
+- **Dropped support for Python 3.8 and 3.9** (both reached end-of-life)
+  - Minimum Python version: 3.10
+  - Supported versions: 3.10, 3.11, 3.12, 3.13
+  - Aligns with active Python maintenance schedule
+  - Ensures security updates and modern language features
 
 #### Code Quality
 - **Reformatted all Python files** to comply with ruff standards
@@ -72,6 +79,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Cached dependencies for faster subsequent runs
 
 ### Developer Impact
+- **Breaking Change**: Requires Python 3.10 or higher
+  - Python 3.8 and 3.9 are no longer supported (both EOL)
+  - Upgrade to Python 3.10+ before using this version
 - **Breaking Change**: Development workflow now uses ruff instead of black/isort/pylint
   - Old: `black *.py && isort *.py && pylint *.py`
   - New: `ruff format *.py && ruff check --fix *.py`

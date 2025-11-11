@@ -3,7 +3,7 @@ name = "poker-hands"
 version = "2.0.0-beta.1"
 description = "A Python poker hand classifier with CLI interface"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 keywords = ["poker", "card-games", "classifier", "poker-hands"]
 authors = [
@@ -14,11 +14,10 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Games/Entertainment",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
@@ -36,7 +35,7 @@ dev = [
 [tool.ruff]
 # Same line length as black default
 line-length = 88
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 # Start with a conservative set of rules
