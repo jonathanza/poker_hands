@@ -124,7 +124,9 @@ def get_cards() -> List[Tuple[str, str]]:
                 )
 
         except ValidationError as error:
-            console.print(f"[bold red]Validation Error:[/bold red] {error}", style="red")
+            console.print(
+                f"[bold red]Validation Error:[/bold red] {error}", style="red"
+            )
 
     return cards
 
@@ -206,15 +208,11 @@ def main() -> None:
         display_result(hand, hand_type)
 
     except ValidationError as error:
-        console.print(
-            f"[bold red]Validation Error:[/bold red] {error}", style="red"
-        )
+        console.print(f"[bold red]Validation Error:[/bold red] {error}", style="red")
     except KeyboardInterrupt:
         console.print("\n[yellow]Goodbye![/yellow]")
     except Exception as error:
-        console.print(
-            f"[bold red]Unexpected Error:[/bold red] {error}", style="red"
-        )
+        console.print(f"[bold red]Unexpected Error:[/bold red] {error}", style="red")
 
 
 if __name__ == "__main__":

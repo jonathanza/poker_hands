@@ -10,7 +10,6 @@ from enum import Enum
 from typing import List, Tuple
 
 from core import Card, Hand, HandClassifier, HandType
-from core import Rank as CoreRank
 
 
 class Rank(Enum):

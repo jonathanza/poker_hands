@@ -6,11 +6,11 @@ rather than testing specific examples.
 """
 
 import unittest
-from typing import List, Tuple
 
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
-from core import Card, Hand, HandClassifier, HandType, Rank, Suit
+from core import Card, Hand, HandClassifier, HandType, Rank
 
 
 # Strategies for generating test data
