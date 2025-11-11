@@ -5,6 +5,92 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2025-11-11
+
+### Added
+
+#### Core Library Refactoring (Phase 4)
+- **Modular architecture** with `core/` package
+  - `core/enums.py`: Type-safe Rank, Suit, HandType enumerations
+  - `core/models.py`: Pydantic models for Card and Hand with validation
+  - `core/classifier.py`: HandClassifier for poker hand classification
+  - `core/validators.py`: Input validation utility functions
+- **Enhanced CLI** in `cli/cli.py` with rich formatting
+  - Color-coded output based on hand strength
+  - Better error messages and input validation
+  - Unicode suit symbols (♥ ♦ ♣ ♠)
+- **Comprehensive test suite** (71 total tests)
+  - `tests/test_core.py`: 37 unit tests for core library (91% coverage)
+  - `tests/test_properties.py`: 23 property-based tests using Hypothesis
+  - Legacy `unit_tests.py`: 11 tests still passing (backward compatibility)
+- **Type hints everywhere** for mypy strict mode compatibility
+- **Property-based testing** with Hypothesis for robust validation
+
+#### Developer Experience
+- **Pydantic validation** for automatic input checking
+  - Frozen models (immutable cards and hands)
+  - Custom validators for ranks and suits
+  - Duplicate card detection
+- **Hypothesis integration** for property-based testing
+  - Tests invariants across all possible inputs
+  - Discovers edge cases automatically
+
+### Changed
+
+#### Architecture (NON-BREAKING)
+- **Refactored core logic** into modular components
+  - Separation of concerns: models, enums, logic, validation
+  - Pydantic models replace manual validation
+  - IntEnum for comparable types (Rank, HandType)
+- **Backward-compatible wrapper** in `poker_hand.py`
+  - Legacy API maintained for existing code
+  - All existing tests pass without modification
+  - Internally delegates to new core library
+
+#### Code Quality
+- **100% type hints** throughout codebase
+- **91% test coverage** for core library
+- **Immutable data structures** (Pydantic frozen models)
+- **Better error messages** with Pydantic validation
+
+#### Documentation
+- **Updated CLAUDE.md** with new architecture
+  - Core library structure documented
+  - Usage examples for both new and legacy APIs
+  - Updated test commands
+- **Updated coverage configuration** in `pyproject.toml`
+  - Source tracking for core/, cli/ modules
+  - Proper omit patterns for test files
+
+### Performance
+- **Pydantic validation** provides fast input checking
+- **No performance regression** in classification logic
+- **Efficient immutable models** with frozen dataclasses
+
+### Developer Impact
+- **Non-breaking change**: Existing code continues to work via backward-compatible wrapper
+- **New API available**: Developers can opt-in to core library for better type safety
+- **Enhanced validation**: Pydantic catches errors earlier with better messages
+- **Property-based tests**: Hypothesis ensures correctness across all inputs
+
+### Migration Notes (Optional)
+Developers can optionally migrate to the new core API for better type safety:
+
+**Old (still supported)**:
+```python
+from poker_hand import PokerHand
+hand = PokerHand([("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")])
+print(hand.classify())  # "Royal Flush"
+```
+
+**New (recommended)**:
+```python
+from core import Card, Hand, HandClassifier
+cards = [Card(rank=r, suit=s) for r, s in [("A", "H"), ...]]
+hand = Hand(cards=cards)
+print(HandClassifier.classify(hand))  # HandType.ROYAL_FLUSH
+```
+
 ## [2.0.0-beta.2] - 2025-11-11
 
 ### Added

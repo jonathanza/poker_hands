@@ -2,15 +2,11 @@
 A class representing a hand of poker cards. It includes methods for
 initializing the hand, classifying the hand, and returning a string
 representation of the cards in the hand.
-
-This module provides backward-compatible wrapper around the new core library.
 """
 
+import collections
 from enum import Enum
 from typing import List, Tuple
-
-from core import Card, Hand, HandClassifier, HandType
-from core import Rank as CoreRank
 
 
 class Rank(Enum):
@@ -18,8 +14,6 @@ class Rank(Enum):
     An enumeration class representing the ranks of cards in a poker hand.
     The ranks are T, J, Q, K, and A, with corresponding values of
     10, 11, 12, 13, and 14.
-
-    This is a backward-compatible wrapper around core.enums.Rank.
     """
 
     T = 10
@@ -47,8 +41,6 @@ class PokerHand:
     A class representing a hand of poker cards. It includes methods for
     initializing the hand, classifying the hand, and returning a string
     representation of the cards in the hand.
-
-    This is a backward-compatible wrapper around the new core library.
     """
 
     def __init__(self, cards: List[Tuple[str, str]]) -> None:
@@ -59,20 +51,15 @@ class PokerHand:
         :type cards: List[Tuple[str, str]]
         """
         self.cards: List[Tuple[str, str]] = cards
-
-        # Convert to core Card objects
-        core_cards = [Card(rank=r, suit=s) for r, s in cards]
-
-        # Create core Hand object
-        self._hand = Hand(cards=core_cards)
-
-        # Expose properties for backward compatibility
-        self.ranks: List[int] = sorted(
-            [card.rank.value for card in self._hand.cards], reverse=True
-        )
-        self.suits: List[str] = [card.suit.value for card in self._hand.cards]
-        self.is_flush: bool = self._hand.is_flush
-        self.is_straight: bool = self._hand.is_straight
+        self.ranks: List[int] = [
+            int(r) if r.isdigit() else Rank[r.upper()].value for r, s in cards
+        ]
+        self.ranks.sort(reverse=True)
+        self.suits: List[str] = [s for r, s in cards]
+        self.is_flush: bool = len(set(self.suits)) == 1
+        self.is_straight: bool = (max(self.ranks) - min(self.ranks) == 4) and len(
+            set(self.ranks)
+        ) == 5
 
     def classify(self) -> str:
         """
@@ -83,23 +70,28 @@ class PokerHand:
         :return: the classification of the PokerHand instance
         :rtype: str
         """
-        hand_type = HandClassifier.classify(self._hand)
-
-        # Map HandType enum to string names for backward compatibility
-        hand_type_names = {
-            HandType.ROYAL_FLUSH: "Royal Flush",
-            HandType.STRAIGHT_FLUSH: "Straight Flush",
-            HandType.FOUR_OF_A_KIND: "Four of a Kind",
-            HandType.FULL_HOUSE: "Full House",
-            HandType.FLUSH: "Flush",
-            HandType.STRAIGHT: "Straight",
-            HandType.THREE_OF_A_KIND: "Three of a Kind",
-            HandType.TWO_PAIR: "Two Pair",
-            HandType.ONE_PAIR: "One Pair",
-            HandType.HIGH_CARD: "High Card",
+        counter = collections.Counter(self.ranks)
+        conditions = {
+            (self.is_flush, self.is_straight, min(self.ranks) == 10): "Royal Flush",
+            (self.is_flush, self.is_straight): "Straight Flush",
+            (counter.most_common(1)[0][1] == 4,): "Four of a Kind",
+            (
+                counter.most_common(2)[0][1] == 3,
+                counter.most_common(2)[1][1] == 2,
+            ): "Full House",
+            (counter.most_common(2)[0][1] == 3,): "Three of a Kind",
+            (self.is_flush,): "Flush",
+            (self.is_straight,): "Straight",
+            (
+                counter.most_common(2)[0][1] == 2,
+                counter.most_common(2)[1][1] == 2,
+            ): "Two Pair",
+            (counter.most_common(2)[0][1] == 2,): "One Pair",
         }
-
-        return hand_type_names[hand_type]
+        for condition, hand in conditions.items():
+            if all(condition):
+                return hand
+        return "High Card"
 
     def __str__(self) -> str:
         """

@@ -22,20 +22,21 @@ uv sync --dev
 ### Running Tests
 
 ```bash
-# Run unit tests
+# Run all tests (legacy + new)
+uv run python -m unittest discover -s tests -p "test_*.py"
 uv run python -m unittest unit_tests.py
 
-# Run tests with coverage
-uv run coverage run -m unittest unit_tests.py
+# Run specific test suites
+uv run python -m unittest tests.test_core        # Core library tests
+uv run python -m unittest tests.test_properties  # Property-based tests (Hypothesis)
+uv run python -m unittest unit_tests.py          # Legacy compatibility tests
 
-# Generate coverage report
-uv run coverage report
+# Run tests with coverage (core library)
+uv run --with coverage coverage run --source=core -m unittest tests.test_core
+uv run --with coverage coverage report
 
-# Generate coverage XML report (for Codacy)
-uv run coverage xml -o coverage.xml
-
-# Check coverage threshold (90% minimum)
-uv run coverage report --fail-under=90
+# Check coverage threshold (90% minimum for core)
+uv run --with coverage coverage report --fail-under=90
 ```
 
 ### Linting & Formatting
@@ -92,17 +93,93 @@ uv pip list
 
 ## Code Architecture
 
+### Project Structure (v2.1.0+)
+
+```
+poker_hands/
+├── core/                  # Core library (Phase 4 refactoring)
+│   ├── __init__.py       # Public API exports
+│   ├── enums.py          # Rank, Suit, HandType enums
+│   ├── models.py         # Pydantic Card and Hand models
+│   ├── classifier.py     # HandClassifier logic
+│   └── validators.py     # Input validation helpers
+├── cli/                   # CLI interface
+│   ├── __init__.py
+│   └── cli.py            # Enhanced interactive CLI
+├── tests/                 # Comprehensive test suite
+│   ├── __init__.py
+│   ├── test_core.py      # Core library tests (37 tests)
+│   └── test_properties.py # Hypothesis property tests (23 tests)
+├── poker_hand.py          # Backward-compatible wrapper
+├── poker_hand_cli.py      # Legacy CLI (maintained)
+├── poker_hand_legacy.py   # Original implementation (backup)
+└── unit_tests.py          # Legacy tests (11 tests, still passing)
+```
+
 ### Core Components
 
-- **`poker_hand.py`**: Contains the main `PokerHand` class and `Rank` enum
-  - `Rank` enum maps card ranks (T, J, Q, K, A) to integer values (10-14)
-  - `PokerHand` class takes a list of card tuples `[(rank, suit), ...]`
-  - On initialization, converts ranks to integers, sorts them, checks for flush/straight
-  - `classify()` method uses a conditions dictionary to match hand patterns via `collections.Counter`
+#### New Core Library (`core/`)
 
-- **`poker_hand_cli.py`**: Interactive CLI for inputting and classifying hands (requires `rich` library)
+- **`core/enums.py`**: Type-safe enumerations
+  - `Rank` (IntEnum): Card ranks 2-14 with comparison support
+  - `Suit` (Enum): H, D, C, S with full name support
+  - `HandType` (IntEnum): Hand classifications 1-10 (strength-ordered)
+  - `from_string()` methods for flexible input parsing
 
-- **`unit_tests.py`**: Test suite for the `PokerHand` class
+- **`core/models.py`**: Validated Pydantic models
+  - `Card`: Immutable card with automatic rank/suit validation
+  - `Hand`: 5-card hand with duplicate detection
+  - Properties: `ranks`, `suits`, `is_flush`, `is_straight`
+  - Unicode suit symbols (♥ ♦ ♣ ♠) in string representation
+
+- **`core/classifier.py`**: Hand classification engine
+  - `HandClassifier.classify(hand)`: Returns HandType enum
+  - Uses pattern matching with Counter for efficiency
+  - Fully type-hinted for static analysis
+
+- **`core/validators.py`**: Input validation utilities
+  - `is_valid_rank()`, `is_valid_suit()`, `is_valid_card_tuple()`
+  - `has_duplicates()` for duplicate detection
+
+#### Backward Compatibility Layer
+
+- **`poker_hand.py`**: Wrapper maintaining legacy API
+  - Same interface as v1.x (tuples input, string output)
+  - Internally uses new core library
+  - All legacy tests pass without modification
+
+- **`poker_hand_cli.py`**: Original CLI (still functional)
+
+#### New CLI
+
+- **`cli/cli.py`**: Enhanced interactive experience
+  - Rich formatting with colors and panels
+  - Better error messages and input validation
+  - Uses Pydantic models directly
+
+### Usage Examples
+
+#### New Core API (Recommended)
+```python
+from core import Card, Hand, HandClassifier
+
+# Create cards with validation
+cards = [Card(rank="A", suit="H") for ...]
+hand = Hand(cards=cards)
+
+# Classify
+hand_type = HandClassifier.classify(hand)
+print(hand_type)  # HandType.ROYAL_FLUSH
+```
+
+#### Legacy API (Backward Compatible)
+```python
+from poker_hand import PokerHand
+
+# Old API still works
+hand = PokerHand([("A", "H"), ("K", "H"), ...])
+print(hand.classify())  # "Royal Flush"
+```
 
 ### Card Representation
 

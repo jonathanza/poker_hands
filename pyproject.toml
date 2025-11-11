@@ -1,6 +1,6 @@
 [project]
 name = "poker-hands"
-version = "2.0.0-beta.2"
+version = "2.1.0"
 description = "A Python poker hand classifier with CLI interface"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -76,8 +76,15 @@ quote-style = "double"
 indent-style = "space"
 
 [tool.coverage.run]
-include = ["poker_*.py"]
-omit = ["*/__init__.py", "*/tests/*", "*/venv/*"]
+source = ["poker_hand.py", "poker_hand_cli.py", "core/", "cli/"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "unit_tests.py",
+    "poker_hand_legacy.py",
+    "*/__init__.py",
+]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -85,4 +92,13 @@ exclude_lines = [
     "return NotImplemented",
     "return None",
     "pass",
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.147.0",
+    "mypy>=1.18.2",
+    "pydantic>=2.12.4",
 ]
