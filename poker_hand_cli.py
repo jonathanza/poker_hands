@@ -47,9 +47,13 @@ def get_cards() -> List[Tuple[str, str]]:
                     "Invalid input. Please enter a card in the format 'rank suit'."
                 )
             if card[0] not in VALID_RANKS:
-                raise ValueError(f"Invalid rank value. Valid values are: {VALID_RANKS}")
+                raise ValueError(
+                    f"Invalid rank value. Valid values are: {VALID_RANKS}"
+                )
             if card[1] not in VALID_SUITS:
-                raise ValueError(f"Invalid suit value. Valid values are: {VALID_SUITS}")
+                raise ValueError(
+                    f"Invalid suit value. Valid values are: {VALID_SUITS}"
+                )
             cards.append(card)
         except ValueError as error:
             console.print(error)

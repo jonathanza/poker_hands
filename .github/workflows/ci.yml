@@ -14,33 +14,19 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.11
+    - name: Set up Python 3.12
       uses: actions/setup-python@v5
       with:
-        python-version: "3.11"
+        python-version: "3.12"
 
-    - name: Cache pip packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-pipenv-
+    - name: Install ruff
+      run: pip install ruff
 
-    - name: Install pipenv
-      run: pip install pipenv
+    - name: Check code formatting with Ruff
+      run: ruff format --check *.py
 
-    - name: Install dependencies
-      run: pipenv install --python $(which python) --dev --skip-lock --pre
-
-    - name: Check code formatting with Black
-      run: pipenv run black --check -v *.py
-
-    - name: Check import sorting with isort
-      run: pipenv run isort --check-only *.py
-
-    - name: Lint with Pylint
-      run: pipenv run pylint *.py
+    - name: Lint with Ruff
+      run: ruff check *.py
 
   test:
     name: Test (Python ${{ matrix.python-version }})
