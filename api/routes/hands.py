@@ -7,7 +7,12 @@ from typing import List
 from fastapi import APIRouter, HTTPException, status
 from pydantic import ValidationError
 
-from api.schemas import ClassifyRequest, ClassifyResponse, CompareRequest, CompareResponse
+from api.schemas import (
+    ClassifyRequest,
+    ClassifyResponse,
+    CompareRequest,
+    CompareResponse,
+)
 from core import Card, Hand, HandClassifier
 
 router = APIRouter(prefix="/api/v1", tags=["hands"])

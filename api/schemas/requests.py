@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 from pydantic import BaseModel, Field, field_validator
 
-from core.validators import is_valid_card_tuple, has_duplicates
+from core.validators import has_duplicates, is_valid_card_tuple
 
 
 class ClassifyRequest(BaseModel):
