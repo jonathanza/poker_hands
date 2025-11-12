@@ -6,10 +6,10 @@ comparing hands, and batch operations.
 
 Usage:
     # Run the API server
-    uvicorn api.main:app --reload
+    uv run uvicorn api.main:app --reload
 
     # Or using the main module
-    python -m api.main
+    uv run python -m api.main
 """
 
 from api.main import app

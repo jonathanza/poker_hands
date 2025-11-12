@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Interactive API documentation** at `/api/docs`
 - **Request/response examples** in OpenAPI schema
 - **Type-safe API** leveraging existing Pydantic models
-- **Easy local development** with `uvicorn api.main:app --reload`
+- **Easy local development** with `uv run uvicorn api.main:app --reload`
 
 ### Changed
 
@@ -115,7 +115,7 @@ The API is a **new feature** - no breaking changes to existing library or CLI.
 uv sync --extra api
 
 # Run the API server
-uvicorn api.main:app --reload
+uv run uvicorn api.main:app --reload
 
 # Access interactive docs
 open http://localhost:8000/api/docs

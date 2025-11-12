@@ -31,7 +31,7 @@ pip install -e .
 
 Start the API server:
 ```bash
-uvicorn api.main:app --reload
+uv run uvicorn api.main:app --reload
 ```
 
 Access interactive documentation at **http://localhost:8000/api/docs**
