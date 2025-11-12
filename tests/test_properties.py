@@ -9,6 +9,7 @@ import unittest
 
 from hypothesis import given
 from hypothesis import strategies as st
+from pydantic import ValidationError
 
 from core import Card, Hand, HandClassifier, HandType, Rank
 
@@ -102,13 +103,9 @@ class TestCardProperties(unittest.TestCase):
         """Cards should be immutable."""
         card = Card(rank=rank, suit=suit)
         original_rank = card.rank
-        # Trying to modify should fail (frozen model)
-        try:
+        # Trying to modify should raise ValidationError (frozen model)
+        with self.assertRaises(ValidationError):
             card.rank = Rank.ACE  # type: ignore
-            self.fail("Card should be immutable")
-        except Exception:
-            # Expected to fail
-            pass
         # Rank should remain unchanged
         self.assertEqual(card.rank, original_rank)
 
