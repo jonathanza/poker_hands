@@ -23,10 +23,10 @@ jobs:
       run: pip install ruff
 
     - name: Check code formatting with Ruff
-      run: ruff format --check *.py
+      run: ruff format --check .
 
     - name: Lint with Ruff
-      run: ruff check *.py
+      run: ruff check .
 
   test:
     name: Test (Python ${{ matrix.python-version }})
@@ -61,23 +61,28 @@ jobs:
     - name: Install dependencies
       run: uv sync --dev
 
-    - name: Run unit tests
-      run: uv run python -m unittest unit_tests.py
+    - name: Run all tests
+      run: |
+        uv run python -m unittest unit_tests.py
+        uv run python -m unittest tests.test_core
+        uv run python -m unittest tests.test_properties
 
     - name: Run tests with coverage (Python 3.11 only)
       if: matrix.python-version == '3.11'
-      run: uv run coverage run -m unittest unit_tests.py
+      run: |
+        uv run --with coverage coverage run --source=core -m unittest tests.test_core tests.test_properties
+        uv run --with coverage coverage run --append -m unittest unit_tests.py
 
     - name: Generate coverage report
       if: matrix.python-version == '3.11'
       run: |
-        uv run coverage report
-        uv run coverage xml -o coverage.xml
+        uv run --with coverage coverage report
+        uv run --with coverage coverage xml -o coverage.xml
 
-    - name: Check coverage thresholds
+    - name: Check coverage thresholds (Core library)
       if: matrix.python-version == '3.11'
       run: |
-        uv run coverage report --fail-under=90
+        uv run --with coverage coverage report --fail-under=90
 
     - name: Upload coverage to Codacy
       if: matrix.python-version == '3.11' && github.event_name == 'push'
@@ -120,8 +125,14 @@ jobs:
 
     - name: Test CLI imports and basic functionality
       run: |
-        # Test that the CLI can be imported and shows help
-        uv run python -c "import poker_hand_cli; print('CLI module imports successfully')"
+        # Test legacy CLI module
+        uv run python -c "import poker_hand_cli; print('Legacy CLI imports successfully')"
 
-        # Test that poker_hand module works
-        uv run python -c "from poker_hand import PokerHand, Rank; hand = PokerHand([('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]); print(f'Test hand: {hand.classify()}')"
+        # Test backward-compatible API
+        uv run python -c "from poker_hand import PokerHand, Rank; hand = PokerHand([('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]); print(f'Legacy API: {hand.classify()}')"
+
+        # Test new core library API
+        uv run python -c "from core import Card, Hand, HandClassifier; cards = [Card(rank=r, suit=s) for r, s in [('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]]; hand = Hand(cards=cards); result = HandClassifier.classify(hand); print(f'Core API: {result}')"
+
+        # Test new CLI module
+        uv run python -c "from cli.cli import main; print('New CLI imports successfully')"
