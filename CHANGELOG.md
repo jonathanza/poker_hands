@@ -5,6 +5,126 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-11-12
+
+### Added
+
+#### FastAPI REST API (Phase 5)
+- **Production-ready REST API** for poker hand classification
+  - `POST /api/v1/classify` - Classify a single hand
+  - `POST /api/v1/classify/batch` - Classify up to 100 hands in one request
+  - `POST /api/v1/compare` - Compare two hands and determine winner
+  - `GET /health` - Health check endpoint with version info
+  - `GET /api/docs` - Interactive Swagger/OpenAPI documentation
+  - `GET /api/redoc` - Alternative ReDoc documentation
+
+#### API Features
+- **Automatic request validation** using Pydantic schemas
+- **Comprehensive error handling** with appropriate HTTP status codes
+- **CORS middleware** configured for cross-origin requests
+- **OpenAPI 3.0 specification** auto-generated from code
+- **Batch processing** support (up to 100 hands per request)
+- **Hand comparison** with winner determination
+
+#### API Testing
+- **14 comprehensive API tests** covering all endpoints
+- Tests for success cases, validation errors, and edge cases
+- FastAPI TestClient for integration testing
+- 100% API endpoint coverage
+
+#### Developer Experience
+- **Interactive API documentation** at `/api/docs`
+- **Request/response examples** in OpenAPI schema
+- **Type-safe API** leveraging existing Pydantic models
+- **Easy local development** with `uvicorn api.main:app --reload`
+
+### Changed
+
+#### Project Structure (v3.0.0)
+```
+poker_hands/
+├── api/                   # 🆕 FastAPI REST API
+│   ├── __init__.py
+│   ├── main.py           # FastAPI application
+│   ├── routes/
+│   │   ├── hands.py      # Classification endpoints
+│   │   └── health.py     # Health check
+│   └── schemas/
+│       ├── requests.py   # Request models
+│       └── responses.py  # Response models
+├── core/                  # Core library (Phase 4)
+├── cli/                   # CLI interfaces
+└── tests/
+    ├── test_api.py       # 🆕 API tests (14 tests)
+    ├── test_core.py
+    └── test_properties.py
+```
+
+#### Dependencies
+- Added `fastapi>=0.115.0` for REST API framework
+- Added `uvicorn[standard]>=0.32.0` for ASGI server
+- Added `python-multipart>=0.0.12` for form data support
+- Added `httpx>=0.28.1` (dev) for API testing
+
+#### CI/CD
+- Updated test suite to include API tests (85 total tests)
+- Added FastAPI smoke test to CI workflow
+- Coverage now tracks `api/` package
+- Install API dependencies in CI with `--extra api`
+
+### Performance
+- **Async endpoints** for better concurrency
+- **Batch processing** reduces overhead for multiple classifications
+- **Efficient validation** reusing core library Pydantic models
+
+### API Usage Examples
+
+**Classify a single hand:**
+```bash
+curl -X POST "http://localhost:8000/api/v1/classify" \
+  -H "Content-Type: application/json" \
+  -d '{"cards": [["A", "H"], ["K", "H"], ["Q", "H"], ["J", "H"], ["T", "H"]]}'
+```
+
+**Response:**
+```json
+{
+  "hand_type": "Royal Flush",
+  "strength": 10,
+  "cards": ["A♥", "K♥", "Q♥", "J♥", "T♥"]
+}
+```
+
+**Compare two hands:**
+```bash
+curl -X POST "http://localhost:8000/api/v1/compare" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "hand1": [["A","H"],["K","H"],["Q","H"],["J","H"],["T","H"]],
+    "hand2": [["2","S"],["3","D"],["4","C"],["5","H"],["7","S"]]
+  }'
+```
+
+### Migration Notes
+
+The API is a **new feature** - no breaking changes to existing library or CLI.
+
+**To use the API:**
+```bash
+# Install with API dependencies
+uv sync --extra api
+
+# Run the API server
+uvicorn api.main:app --reload
+
+# Access interactive docs
+open http://localhost:8000/api/docs
+```
+
+### What's Next
+- Phase 6: Web interface (v3.1.0)
+- Phase 7: Terminal UI with Textual (v3.2.0)
+
 ## [2.1.0] - 2025-11-11
 
 ### Added

@@ -59,18 +59,19 @@ jobs:
           ${{ runner.os }}-uv-
 
     - name: Install dependencies
-      run: uv sync --dev
+      run: uv sync --dev --extra api
 
     - name: Run all tests
       run: |
         uv run python -m unittest unit_tests.py
         uv run python -m unittest tests.test_core
         uv run python -m unittest tests.test_properties
+        uv run python -m unittest tests.test_api
 
     - name: Run tests with coverage (Python 3.11 only)
       if: matrix.python-version == '3.11'
       run: |
-        uv run --with coverage coverage run --source=core -m unittest tests.test_core tests.test_properties
+        uv run --with coverage coverage run --source=core,api -m unittest tests.test_core tests.test_properties tests.test_api
         uv run --with coverage coverage run --append -m unittest unit_tests.py
 
     - name: Generate coverage report
@@ -121,7 +122,7 @@ jobs:
       run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
     - name: Install dependencies
-      run: uv sync
+      run: uv sync --extra api
 
     - name: Test CLI imports and basic functionality
       run: |
@@ -136,3 +137,6 @@ jobs:
 
         # Test new CLI module
         uv run python -c "from cli.cli import main; print('New CLI imports successfully')"
+
+        # Test FastAPI app
+        uv run python -c "from api.main import app; print(f'FastAPI app created: {app.title}')"
