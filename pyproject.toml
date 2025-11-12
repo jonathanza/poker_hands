@@ -1,0 +1,104 @@
+[project]
+name = "poker-hands"
+version = "2.1.0"
+description = "A Python poker hand classifier with CLI interface"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["poker", "card-games", "classifier", "poker-hands"]
+authors = [
+    {name = "Jonathan Marshall"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "rich>=13.3.1",
+]
+
+[project.optional-dependencies]
+# Development dependencies
+dev = [
+    "ruff>=0.8.0",
+    "coverage>=7.1.0",
+    "pre-commit>=3.0.0",
+]
+
+# API dependencies (Phase 5 - v3.0.0)
+# Uncomment when implementing FastAPI backend
+# api = [
+#     "fastapi>=0.104.0",
+#     "uvicorn[standard]>=0.24.0",
+#     "pydantic>=2.0.0",
+#     "python-multipart>=0.0.6",
+# ]
+
+# TUI dependencies (Phase 7 - v3.2.0)
+# Uncomment when implementing Terminal UI
+# tui = [
+#     "textual>=0.40.0",
+#     "rich>=13.3.1",  # Already in main deps, but explicit for TUI
+# ]
+
+# All optional dependencies combined
+# all = [
+#     "poker-hands[dev,api,tui]",
+# ]
+
+[tool.ruff]
+# Same line length as black default
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+# Start with a conservative set of rules
+select = [
+    "E",    # pycodestyle errors
+    "F",    # Pyflakes
+    "I",    # isort
+]
+
+# isort-compatible settings
+isort.known-first-party = ["poker_hand", "poker_hand_cli"]
+
+[tool.ruff.format]
+# Format settings compatible with black
+quote-style = "double"
+indent-style = "space"
+
+[tool.coverage.run]
+source = ["poker_hand.py", "poker_hand_cli.py", "core/", "cli/"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "unit_tests.py",
+    "poker_hand_legacy.py",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "raise NotImplementedError",
+    "return NotImplemented",
+    "return None",
+    "pass",
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.147.0",
+    "mypy>=1.18.2",
+    "pydantic>=2.12.4",
+]

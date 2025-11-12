@@ -1,8 +1,9 @@
 """
-Prompts user to input a card in the format 'rank suit' until a total of 5 cards are entered.
-Validates the input by checking against the valid ranks and suits.
-Returns a list of tuples containing entered cards.
+Prompts user to input a card in the format 'rank suit' until a total
+of 5 cards are entered. Validates the input by checking against the
+valid ranks and suits. Returns a list of tuples containing entered cards.
 """
+
 from typing import List, Tuple
 
 from rich.console import Console

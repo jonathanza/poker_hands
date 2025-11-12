@@ -1,0 +1,138 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, claude/* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install ruff
+      run: pip install ruff
+
+    - name: Check code formatting with Ruff
+      run: ruff format --check .
+
+    - name: Lint with Ruff
+      run: ruff check .
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install uv
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Add uv to PATH
+      run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Cache uv packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-
+
+    - name: Install dependencies
+      run: uv sync --dev
+
+    - name: Run all tests
+      run: |
+        uv run python -m unittest unit_tests.py
+        uv run python -m unittest tests.test_core
+        uv run python -m unittest tests.test_properties
+
+    - name: Run tests with coverage (Python 3.11 only)
+      if: matrix.python-version == '3.11'
+      run: |
+        uv run --with coverage coverage run --source=core -m unittest tests.test_core tests.test_properties
+        uv run --with coverage coverage run --append -m unittest unit_tests.py
+
+    - name: Generate coverage report
+      if: matrix.python-version == '3.11'
+      run: |
+        uv run --with coverage coverage report
+        uv run --with coverage coverage xml -o coverage.xml
+
+    - name: Check coverage thresholds (Core library)
+      if: matrix.python-version == '3.11'
+      run: |
+        uv run --with coverage coverage report --fail-under=90
+
+    - name: Upload coverage to Codacy
+      if: matrix.python-version == '3.11' && github.event_name == 'push'
+      uses: codacy/codacy-coverage-reporter-action@v1
+      continue-on-error: true
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: coverage.xml
+
+    - name: Upload coverage artifact
+      if: matrix.python-version == '3.11'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: |
+          coverage.xml
+          .coverage
+        retention-days: 30
+
+  cli-test:
+    name: CLI Smoke Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install uv
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Add uv to PATH
+      run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: uv sync
+
+    - name: Test CLI imports and basic functionality
+      run: |
+        # Test legacy CLI module
+        uv run python -c "import poker_hand_cli; print('Legacy CLI imports successfully')"
+
+        # Test backward-compatible API
+        uv run python -c "from poker_hand import PokerHand, Rank; hand = PokerHand([('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]); print(f'Legacy API: {hand.classify()}')"
+
+        # Test new core library API
+        uv run python -c "from core import Card, Hand, HandClassifier; cards = [Card(rank=r, suit=s) for r, s in [('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]]; hand = Hand(cards=cards); result = HandClassifier.classify(hand); print(f'Core API: {result}')"
+
+        # Test new CLI module
+        uv run python -c "from cli.cli import main; print('New CLI imports successfully')"
