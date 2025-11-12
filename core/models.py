@@ -147,7 +147,9 @@ class Hand(BaseModel):
             Hand instance
 
         Example:
-            >>> Hand.from_tuples([("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")])
+            >>> Hand.from_tuples([
+            ...     ("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")
+            ... ])
             Hand(cards=[...])
         """
         cards = [Card.from_tuple(t) for t in card_tuples]

@@ -33,7 +33,9 @@ class HandClassifier:
 
         Example:
             >>> from core.models import Hand
-            >>> hand = Hand.from_tuples([("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")])
+            >>> hand = Hand.from_tuples([
+            ...     ("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")
+            ... ])
             >>> HandClassifier.classify(hand)
             HandType.ROYAL_FLUSH
         """
@@ -94,7 +96,9 @@ class HandClassifier:
 
         Example:
             >>> from core.models import Hand
-            >>> hand = Hand.from_tuples([("A", "H"), ("K", "D"), ("Q", "C"), ("J", "S"), ("9", "H")])
+            >>> hand = Hand.from_tuples([
+            ...     ("A", "H"), ("K", "D"), ("Q", "C"), ("J", "S"), ("9", "H")
+            ... ])
             >>> HandClassifier.classify_string(hand)
             'High Card'
         """
