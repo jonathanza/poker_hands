@@ -27,7 +27,7 @@ if [ "$1" == "--fix" ] || [ "$1" == "-f" ]; then
     print_step "Formatting code with ruff..."
     uv run ruff format .
     print_success "Code formatted"
-    
+
     print_step "Fixing linting issues..."
     uv run ruff check --fix .
     print_success "Linting issues fixed"
@@ -49,7 +49,7 @@ else
         print_warning "Code formatting issues found. Run with --fix to auto-format."
         exit 1
     fi
-    
+
     print_step "Running linter..."
     if uv run ruff check .; then
         print_success "No linting issues found"
@@ -57,6 +57,6 @@ else
         print_warning "Linting issues found. Run with --fix to auto-fix."
         exit 1
     fi
-    
+
     print_success "All checks passed"
 fi

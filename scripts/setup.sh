@@ -53,7 +53,7 @@ main() {
 
     PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
     REQUIRED_VERSION="3.10"
-    
+
     if [ "$(printf '%s\n' "$REQUIRED_VERSION" "$PYTHON_VERSION" | sort -V | head -n1)" != "$REQUIRED_VERSION" ]; then
         print_error "Python $PYTHON_VERSION found, but Python $REQUIRED_VERSION or higher is required."
         exit 1
@@ -65,10 +65,10 @@ main() {
     if ! command_exists uv; then
         print_warning "uv not found. Installing uv..."
         curl -LsSf https://astral.sh/uv/install.sh | sh
-        
+
         # Add uv to PATH for current session
         export PATH="$HOME/.cargo/bin:$PATH"
-        
+
         if command_exists uv; then
             print_success "uv installed successfully"
         else
@@ -104,7 +104,7 @@ main() {
 
     # Verify installation
     print_step "Verifying installation..."
-    
+
     # Test core library
     if uv run python -c "from core import Card, Hand, HandClassifier; print('Core library OK')" 2>/dev/null; then
         print_success "Core library working"
@@ -139,17 +139,17 @@ main() {
     echo ""
     echo -e "${BLUE}Next steps:${NC}"
     echo ""
-    
+
     if [ "$1" != "--api" ] && [ "$1" != "--all" ]; then
         echo "  ${YELLOW}To install API dependencies:${NC}"
         echo "    ./scripts/setup.sh --api"
         echo ""
     fi
-    
+
     echo "  ${YELLOW}Try the core library:${NC}"
     echo "    uv run python -c 'from core import Card, Hand, HandClassifier; print(Card(rank=\"A\", suit=\"H\"))'"
     echo ""
-    
+
     if [ "$1" == "--api" ] || [ "$1" == "--all" ]; then
         echo "  ${YELLOW}Start the API server:${NC}"
         echo "    uv run uvicorn api.main:app --reload"
@@ -158,7 +158,7 @@ main() {
         echo "    http://localhost:8000/api/docs"
         echo ""
     fi
-    
+
     echo "  ${YELLOW}Run tests:${NC}"
     echo "    uv run python -m unittest discover -s tests"
     echo ""
