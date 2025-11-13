@@ -17,13 +17,53 @@ A modern, production-ready Python library for classifying poker hands with **thr
 
 ### Installation
 
+**Option 1: Using the setup script (recommended)**
+
 ```bash
-# Install with uv (recommended)
+# Clone the repository
+git clone https://github.com/jonathanza/poker_hands.git
+cd poker_hands
+
+# Run setup script
+./scripts/setup.sh --api
+
+# Start the API server
+./scripts/dev.sh
+```
+
+**Option 2: Manual installation**
+
+```bash
+# Install uv (one-time setup)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install with API support
 uv sync --extra api
 
-# Or with pip
-pip install -e .
+# Or install core only
+uv sync
 ```
+
+### Quick Commands
+
+```bash
+# Start API server
+./scripts/run-api.sh              # or: uv run uvicorn api.main:app --reload
+
+# Run all tests
+./scripts/test.sh                 # or: uv run python -m unittest discover -s tests
+
+# Run tests with coverage
+./scripts/test.sh --coverage
+
+# Lint code
+./scripts/lint.sh                 # or: uv run ruff check .
+
+# Auto-fix linting
+./scripts/lint.sh --fix           # or: uv run ruff check --fix .
+```
+
+See [scripts/README.md](./scripts/README.md) for more script options.
 
 ### Usage Examples
 
