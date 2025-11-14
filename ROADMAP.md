@@ -19,9 +19,11 @@ Create a modern, multi-interface poker hand classifier that demonstrates best pr
 
 ---
 
-## 📊 Current Status: v2.0.0-beta.1
+## 📊 Current Status: v3.0.0
 
-### ✅ Completed (Phase 1 & 2)
+### ✅ Completed (Phases 1-5)
+
+#### Phase 1 & 2: Modern Tooling
 - [x] Comprehensive CI/CD pipelines (GitHub Actions)
 - [x] Migrated to ruff for linting and formatting
 - [x] Auto-format workflow for PRs
@@ -32,12 +34,42 @@ Create a modern, multi-interface poker hand classifier that demonstrates best pr
 - [x] Multi-version testing (3.10, 3.11, 3.12, 3.13)
 - [x] Coverage enforcement (90%+ threshold)
 
-### 🎨 Current Architecture
+#### Phase 3: Complete Modernization
+- [x] Migrated from pipenv to uv
+- [x] Updated all documentation with uv commands
+- [x] Removed Pipfile and Pipfile.lock
+- [x] Updated CI workflows to use uv
+
+#### Phase 4: Core Library Refactoring (v2.1.0)
+- [x] Modular architecture with Pydantic models
+- [x] Type hints throughout (mypy compatible)
+- [x] 91% core library coverage, 71 total tests
+- [x] Property-based testing with Hypothesis
+- [x] 100% backward compatibility
+
+#### Phase 5: FastAPI Backend (v3.0.0)
+- [x] Production-ready REST API
+- [x] OpenAPI documentation
+- [x] 85 total tests, 94% coverage
+- [x] Development helper scripts
+
+### 🎨 Current Architecture (v3.0.0)
 ```
 poker_hands/
-├── poker_hand.py          # Core library (Rank enum, PokerHand class)
-├── poker_hand_cli.py      # Simple CLI using rich
-└── unit_tests.py          # Test suite
+├── core/                  # Core library (Pydantic models, classifiers)
+│   ├── enums.py          # Rank, Suit, HandType enums
+│   ├── models.py         # Card and Hand models
+│   ├── classifier.py     # Classification logic
+│   └── validators.py     # Input validation
+├── api/                   # FastAPI REST API
+│   ├── main.py           # FastAPI app
+│   ├── routes/           # API endpoints
+│   └── schemas/          # Request/response models
+├── cli/                   # Enhanced CLI with rich
+├── scripts/               # Development helper scripts
+├── tests/                 # Comprehensive test suite (85 tests)
+├── poker_hand.py          # Backward-compatible wrapper
+└── unit_tests.py          # Legacy tests
 ```
 
 ---
@@ -108,11 +140,11 @@ poker_hands/
 
 ---
 
-### Phase 5: FastAPI Backend (v3.0.0)
-**Timeline**: Month 1
+### Phase 5: FastAPI Backend (v3.0.0) ✅ COMPLETED
+**Timeline**: ~~Month 1~~ **Completed 2025-11-14**
 **Goal**: Create production-ready REST API
 
-#### New Structure
+#### Final Structure
 ```
 poker_hands/
 ├── core/                  # Core library (from Phase 4)
@@ -122,53 +154,70 @@ poker_hands/
 │   ├── routes/
 │   │   ├── hands.py      # Hand classification endpoints
 │   │   └── health.py     # Health check, metrics
-│   ├── schemas/
-│   │   ├── requests.py   # Request models
-│   │   └── responses.py  # Response models
-│   ├── middleware.py     # CORS, rate limiting, logging
-│   └── dependencies.py   # Dependency injection
+│   └── schemas/
+│       ├── requests.py   # Request models
+│       └── responses.py  # Response models
 ├── cli/                   # CLI interface (uses core)
+├── scripts/               # Development helper scripts
+│   ├── setup.sh          # Installation script
+│   ├── run-api.sh        # Start API server
+│   ├── dev.sh            # Development mode
+│   ├── test.sh           # Test runner
+│   └── lint.sh           # Code quality checks
 └── tests/
-    ├── test_core.py
-    ├── test_api.py
-    └── test_integration.py
+    ├── test_core.py      # 37 core library tests
+    ├── test_properties.py # 23 property-based tests
+    ├── test_api.py       # 14 API tests
+    └── __init__.py
 ```
 
-#### API Endpoints
+#### Implemented API Endpoints
 ```
-GET  /api/v1/health              # Health check
+GET  /                           # Redirect to API docs
+GET  /health                     # Health check
 POST /api/v1/classify            # Classify a single hand
-POST /api/v1/classify/batch      # Classify multiple hands
+POST /api/v1/classify/batch      # Classify multiple hands (up to 100)
 POST /api/v1/compare             # Compare two hands
-GET  /api/v1/hands/examples      # Get example hands
-GET  /api/docs                   # OpenAPI documentation
+GET  /api/docs                   # OpenAPI documentation (Swagger)
+GET  /api/redoc                  # ReDoc documentation
+GET  /api/openapi.json           # OpenAPI schema
 ```
 
-#### Features
-- [ ] RESTful API with FastAPI
-- [ ] OpenAPI/Swagger documentation
-- [ ] Request validation with Pydantic
-- [ ] Error handling and status codes
-- [ ] Rate limiting
-- [ ] CORS configuration
-- [ ] Logging and monitoring
-- [ ] Dockerized deployment
-- [ ] Health checks and metrics
-- [ ] API versioning (v1)
-- [ ] Authentication (optional, for future)
+#### Completed Features
+- [x] RESTful API with FastAPI
+- [x] OpenAPI/Swagger documentation
+- [x] Request validation with Pydantic
+- [x] Error handling and status codes (200, 400, 422)
+- [x] CORS configuration (middleware)
+- [x] Health checks and metrics
+- [x] API versioning (v1)
+- [x] Batch processing (up to 100 hands)
+- [x] Comprehensive API tests (14 tests)
+- [x] Development helper scripts (5 scripts)
+- [ ] Rate limiting (deferred to v3.0.x)
+- [ ] Enhanced logging and monitoring (deferred to v3.0.x)
+- [ ] Dockerized deployment (deferred to v3.0.x)
+- [ ] Authentication (deferred to future)
 
 #### Dependencies
 ```toml
 [project.optional-dependencies]
 api = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "pydantic>=2.0.0",
-    "python-multipart>=0.0.6",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
 ]
 ```
 
-**Success Criteria**: Production-ready API with comprehensive docs
+**Success Criteria**: ✅ Production-ready API with comprehensive docs
+
+#### Achievements
+- 85 total tests (37 core + 23 property + 11 legacy + 14 API)
+- 94% overall test coverage
+- Complete OpenAPI documentation
+- 5 helper scripts for streamlined development
+- Zero breaking changes from v2.x
+- Full backward compatibility maintained
 
 ---
 
@@ -460,4 +509,4 @@ This roadmap is a living document and will evolve based on:
 - Resource availability
 - Priority changes
 
-**Last Updated**: 2025-11-11 (v2.0.0-beta.1)
+**Last Updated**: 2025-11-14 (v3.0.0)
