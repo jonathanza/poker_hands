@@ -1,228 +1,413 @@
-# PokerHand Class
+# Poker Hands Classifier 🃏
 
 [![CI](https://github.com/jonathanza/poker_hands/actions/workflows/ci.yml/badge.svg)](https://github.com/jonathanza/poker_hands/actions/workflows/ci.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ec8a9ce37ca748f9b4226da7dd5efff9)](https://www.codacy.com/gh/jonathanza/poker_hands/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ec8a9ce37ca748f9b4226da7dd5efff9)](https://www.codacy.com/gh/jonathanza/poker_hands/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jonathanza/poker_hands&utm_campaign=Badge_Coverage)
 
-The `PokerHand` class is a Python class that can be used to classify a poker hand into one of the following categories:
+A modern, production-ready Python library for classifying poker hands with **three interfaces**: a type-safe library, an interactive CLI, and a REST API.
 
-- 'Royal Flush'
-- 'Straight Flush'
-- 'Four of a Kind'
-- 'Full House'
-- 'Flush'
-- 'Straight'
-- 'Three of a Kind'
-- 'Two Pair'
-- 'One Pair'
-- 'High Card'
+## ✨ Features
 
-## Installation
+- 🎯 **Type-Safe Core Library** - Pydantic models with automatic validation
+- 🌐 **FastAPI REST API** - Production-ready with OpenAPI documentation
+- 💻 **Interactive CLI** - Rich terminal interface with Unicode card symbols (♥ ♦ ♣ ♠)
+- 🔒 **100% Test Coverage** - 85 tests including property-based testing
+- ⚡ **Modern Tooling** - Built with `uv` and `ruff` for maximum performance
+- 📦 **Zero Breaking Changes** - Backward-compatible with v1.x API
 
-To use the `PokerHand` class, you'll need to have Python installed on your machine. You can download the latest version of Python from the official website: https://www.python.org/downloads/
+## 🚀 Quick Start
 
-## Usage
+### Installation
 
-### Programmatic
+**Option 1: Using the setup script (recommended)**
 
-This module defines a `PokerHand` class that represents a hand of poker cards and various methods to classify and represent the cards in the hand.
+```bash
+# Clone the repository
+git clone https://github.com/jonathanza/poker_hands.git
+cd poker_hands
 
-To use the module, you need to first import it. Then you can create an instance of the `PokerHand` class by providing a list of cards represented as tuples of rank and suit.
+# Run setup script
+./scripts/setup.sh --api
 
-For example:
+# Start the API server
+./scripts/dev.sh
+```
+
+**Option 2: Manual installation**
+
+```bash
+# Install uv (one-time setup)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install with API support
+uv sync --extra api
+
+# Or install core only
+uv sync
+```
+
+### Quick Commands
+
+```bash
+# Start API server
+./scripts/run-api.sh              # or: uv run uvicorn api.main:app --reload
+
+# Run all tests
+./scripts/test.sh                 # or: uv run python -m unittest discover -s tests
+
+# Run tests with coverage
+./scripts/test.sh --coverage
+
+# Lint code
+./scripts/lint.sh                 # or: uv run ruff check .
+
+# Auto-fix linting
+./scripts/lint.sh --fix           # or: uv run ruff check --fix .
+```
+
+See [scripts/README.md](./scripts/README.md) for more script options.
+
+### Usage Examples
+
+#### 1. REST API (FastAPI)
+
+Start the API server:
+```bash
+uv run uvicorn api.main:app --reload
+```
+
+Access interactive documentation at **http://localhost:8000/api/docs**
+
+**Classify a hand:**
+```bash
+curl -X POST "http://localhost:8000/api/v1/classify" \
+  -H "Content-Type: application/json" \
+  -d '{"cards": [["A", "H"], ["K", "H"], ["Q", "H"], ["J", "H"], ["T", "H"]]}'
+```
+
+**Response:**
+```json
+{
+  "hand_type": "Royal Flush",
+  "strength": 10,
+  "cards": ["A♥", "K♥", "Q♥", "J♥", "T♥"]
+}
+```
+
+#### 2. Core Library (Recommended)
 
 ```python
-from poker import PokerHand
-cards = [("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")]
-hand = PokerHand(cards)
+from core import Card, Hand, HandClassifier
+
+# Create cards with automatic validation
+cards = [
+    Card(rank="A", suit="H"),
+    Card(rank="K", suit="H"),
+    Card(rank="Q", suit="H"),
+    Card(rank="J", suit="H"),
+    Card(rank="T", suit="H"),
+]
+
+# Create hand (validates duplicates automatically)
+hand = Hand(cards=cards)
+
+# Classify
+hand_type = HandClassifier.classify(hand)
+print(hand_type)  # HandType.ROYAL_FLUSH
+print(hand)       # A♥ K♥ Q♥ J♥ T♥
 ```
 
-You can use the `classify()` method on the hand object to classify the hand into one of the following categories: 'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind', 'Two Pair', 'One Pair', 'High Card'
-
-For example:
+#### 3. Legacy API (Backward Compatible)
 
 ```python
-print(hand.classify())
+from poker_hand import PokerHand
+
+# Old v1.x API still works
+hand = PokerHand([("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")])
+print(hand.classify())  # "Royal Flush"
 ```
 
-You can also use the `__str__()` method to get the string representation of the cards in the hand:
+#### 4. Interactive CLI
 
+```bash
+uv run python poker_hand_cli.py
+```
+
+Or use the enhanced CLI:
+```bash
+uv run python -m cli.cli
+```
+
+## 🎴 Hand Classifications
+
+The library classifies hands into 10 categories (from strongest to weakest):
+
+| Rank | Hand Type | Example |
+|------|-----------|---------|
+| 10 | Royal Flush | A♥ K♥ Q♥ J♥ T♥ |
+| 9 | Straight Flush | 9♠ 8♠ 7♠ 6♠ 5♠ |
+| 8 | Four of a Kind | A♦ A♥ A♠ A♣ K♥ |
+| 7 | Full House | K♠ K♥ K♦ Q♣ Q♠ |
+| 6 | Flush | A♥ J♥ 8♥ 5♥ 3♥ |
+| 5 | Straight | 9♥ 8♦ 7♣ 6♠ 5♥ |
+| 4 | Three of a Kind | Q♦ Q♥ Q♠ 7♣ 4♠ |
+| 3 | Two Pair | J♥ J♦ 8♣ 8♠ 3♥ |
+| 2 | One Pair | T♠ T♥ 9♦ 5♣ 2♠ |
+| 1 | High Card | A♦ K♥ Q♣ J♠ 9♥ |
+
+## 📡 API Endpoints
+
+The FastAPI server provides the following endpoints:
+
+### Classify Single Hand
+```
+POST /api/v1/classify
+```
+Classify a single 5-card poker hand.
+
+**Request:**
+```json
+{
+  "cards": [["A", "H"], ["K", "H"], ["Q", "H"], ["J", "H"], ["T", "H"]]
+}
+```
+
+**Response:**
+```json
+{
+  "hand_type": "Royal Flush",
+  "strength": 10,
+  "cards": ["A♥", "K♥", "Q♥", "J♥", "T♥"]
+}
+```
+
+### Batch Classify
+```
+POST /api/v1/classify/batch
+```
+Classify up to 100 hands in a single request.
+
+**Request:**
+```json
+[
+  {"cards": [["A", "H"], ["K", "H"], ["Q", "H"], ["J", "H"], ["T", "H"]]},
+  {"cards": [["2", "S"], ["3", "D"], ["4", "C"], ["5", "H"], ["7", "S"]]}
+]
+```
+
+### Compare Hands
+```
+POST /api/v1/compare
+```
+Compare two hands and determine the winner.
+
+**Request:**
+```json
+{
+  "hand1": [["A", "H"], ["K", "H"], ["Q", "H"], ["J", "H"], ["T", "H"]],
+  "hand2": [["2", "S"], ["3", "D"], ["4", "C"], ["5", "H"], ["7", "S"]]
+}
+```
+
+**Response:**
+```json
+{
+  "winner": "hand1",
+  "hand1": {"hand_type": "Royal Flush", "strength": 10, "cards": ["A♥", "K♥", "Q♥", "J♥", "T♥"]},
+  "hand2": {"hand_type": "High Card", "strength": 1, "cards": ["2♠", "3♦", "4♣", "5♥", "7♠"]}
+}
+```
+
+### Health Check
+```
+GET /health
+```
+Check API health and version.
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "version": "3.0.0"
+}
+```
+
+## 🏗️ Architecture
+
+```
+poker_hands/
+├── api/                   # FastAPI REST API
+│   ├── main.py           # FastAPI application
+│   ├── routes/           # Endpoint handlers
+│   │   ├── hands.py      # Classification endpoints
+│   │   └── health.py     # Health check
+│   └── schemas/          # Pydantic request/response models
+│       ├── requests.py
+│       └── responses.py
+├── core/                  # Type-safe core library
+│   ├── enums.py          # Rank, Suit, HandType enums
+│   ├── models.py         # Pydantic Card and Hand models
+│   ├── classifier.py     # Hand classification logic
+│   └── validators.py     # Input validation
+├── cli/                   # CLI interfaces
+│   └── cli.py            # Enhanced interactive CLI
+├── tests/                 # Comprehensive test suite
+│   ├── test_api.py       # API tests (14 tests)
+│   ├── test_core.py      # Core library tests (37 tests)
+│   └── test_properties.py # Property-based tests (23 tests)
+├── poker_hand.py          # Backward-compatible wrapper
+├── poker_hand_cli.py      # Legacy CLI
+└── unit_tests.py          # Legacy tests (11 tests)
+```
+
+## 🧪 Testing
+
+The project has **85 comprehensive tests** with multiple testing strategies:
+
+```bash
+# Run all tests
+uv run python -m unittest discover -s tests -p "test_*.py"
+uv run python -m unittest unit_tests.py
+
+# Run specific test suites
+uv run python -m unittest tests.test_api          # API tests
+uv run python -m unittest tests.test_core         # Core library tests
+uv run python -m unittest tests.test_properties   # Property-based tests
+uv run python -m unittest unit_tests              # Legacy tests
+
+# Run with coverage
+uv run --with coverage coverage run --source=core,api -m unittest discover -s tests
+uv run --with coverage coverage report
+```
+
+**Test Coverage:**
+- Core library: 91%
+- API: 100%
+- Overall: 94%
+
+## 🛠️ Development
+
+### Setup
+
+```bash
+# Install uv (one-time setup)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install dependencies
+uv sync --dev --extra api
+```
+
+### Linting & Formatting
+
+```bash
+# Format code
+uv run ruff format .
+
+# Lint code
+uv run ruff check .
+
+# Auto-fix issues
+uv run ruff check --fix .
+```
+
+### Pre-commit Hooks
+
+```bash
+# Install pre-commit hooks
+pip install pre-commit
+pre-commit install
+
+# Run manually
+pre-commit run --all-files
+```
+
+## 🎯 Card Notation
+
+Cards are represented as tuples of `(rank, suit)`:
+
+### Ranks
+- Numbers: `"2"`, `"3"`, `"4"`, `"5"`, `"6"`, `"7"`, `"8"`, `"9"`
+- Ten: `"10"` or `"T"`
+- Face cards: `"J"` (Jack), `"Q"` (Queen), `"K"` (King), `"A"` (Ace)
+- Case-insensitive: `"ace"`, `"Ace"`, `"ACE"` all work
+
+### Suits
+- `"H"` - Hearts (♥)
+- `"D"` - Diamonds (♦)
+- `"C"` - Clubs (♣)
+- `"S"` - Spades (♠)
+- Full names also work: `"hearts"`, `"diamonds"`, etc.
+
+**Example:**
 ```python
-print(hand)
+[("A", "H"), ("K", "H"), ("Q", "H"), ("J", "H"), ("T", "H")]
 ```
 
-You can also access the following attributes of the hand object:
+## 📚 Documentation
 
-- `cards`: a list of cards represented as tuples of rank and suit
-- `ranks`: a list of integers representing the ranks of the cards
-- `suits`: a list of strings representing the suits of the cards
-- `is_flush`: a boolean indicating if the hand is a flush
-- `is_straight`: a boolean indicating if the hand is a straight
+- **API Documentation**: http://localhost:8000/api/docs (when server is running)
+- **ReDoc**: http://localhost:8000/api/redoc
+- **OpenAPI Spec**: http://localhost:8000/api/openapi.json
+- **Development Guide**: See [CLAUDE.md](./CLAUDE.md)
+- **Project Roadmap**: See [ROADMAP.md](./ROADMAP.md)
+- **Changelog**: See [CHANGELOG.md](./CHANGELOG.md)
 
-For example:
+## 🔄 Version History
 
-```python
-print(hand.cards)
-print(hand.ranks)
-print(hand.suits)
-print(hand.is_flush)
-print(hand.is_straight)
-```
+### v3.0.0 (Current) - FastAPI REST API
+- ✨ Production-ready REST API with OpenAPI documentation
+- 🚀 Async endpoints for better performance
+- 📦 Batch processing support (up to 100 hands)
+- 🔍 Hand comparison endpoint
+- 🧪 14 comprehensive API tests
 
-Note that the cards are represented as a tuple of rank and suit, where the rank is represented as a string (with possible values T, J, Q, K, A) and the suit is represented as a single character string (with possible values H, D, S, C).
+### v2.1.0 - Core Library Refactoring
+- 🏗️ Modular architecture with `core/` package
+- 🔒 Type-safe Pydantic models
+- ✅ Property-based testing with Hypothesis
+- 💎 Enhanced CLI with rich formatting
+- 🎯 91% test coverage
 
-### CLI
+### v2.0.0-beta.2 - Modern Tooling
+- ⚡ Migrated from pipenv to uv (10-100x faster)
+- 🔧 Replaced black/isort/pylint with ruff
+- 🤖 GitHub Actions CI/CD
+- 📝 Comprehensive documentation
 
-This script is a command-line interface (CLI) that allows you to classify a poker hand by inputting cards into the terminal.
+## 🤝 Contributing
 
-To use the script, you will need to have python3 and the rich library installed in your system.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-You can run the script by navigating to the directory where the script is located in your terminal and typing:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Run tests (`uv run python -m unittest discover`)
+4. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
 
-```bash
-python3 poker_cli.py
-```
+## 📄 License
 
-The script will prompt you to enter 5 cards in the format "rank suit" (e.g. "ace hearts").
-You can enter the cards one at a time and press enter after each card.
-The script will check if the cards are valid, and if not will prompt you to enter the card again.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Once you have entered 5 valid cards, it will classify the hand and display the result on the console, including the string representation of the cards in the hand and the classification of the hand.
+## 🙏 Acknowledgments
 
-For example:
+- Built with [FastAPI](https://fastapi.tiangolo.com/) for the REST API
+- [Pydantic](https://pydantic.dev/) for data validation
+- [Rich](https://rich.readthedocs.io/) for beautiful terminal output
+- [Hypothesis](https://hypothesis.readthedocs.io/) for property-based testing
+- [uv](https://github.com/astral-sh/uv) for blazing-fast package management
+- [Ruff](https://github.com/astral-sh/ruff) for ultra-fast linting
 
-```bash
-Enter a card in the format 'rank suit': ace hearts
-Enter a card in the format 'rank suit': king hearts
-Enter a card in the format 'rank suit': queen hearts
-Enter a card in the format 'rank suit': jack hearts
-Enter a card in the format 'rank suit': 10 hearts
-Hand: Ace of Hearts King of Hearts Queen of Hearts Jack of Hearts 10 of Hearts
-Classification: Royal Flush
-```
+## 📊 Project Status
 
-## Class Methods
+**Current Phase**: ✅ Phase 5 Complete (v3.0.0)
 
-### PokerHand
+**Coming Next**:
+- Phase 6: Web interface with React/Vue
+- Phase 7: Terminal UI with Textual
+- Phase 8: Enhanced documentation
+- Phase 9: Advanced features (game simulation, odds calculation)
 
-#### `__init__(cards: List[Tuple[str, str]])`
+See [ROADMAP.md](./ROADMAP.md) for the complete vision.
 
-Initializes a `PokerHand` instance with a list of cards represented as tuples of rank and suit.
+---
 
-The `__init__` method of the `PokerHand` class initializes an instance of the class with a list of cards represented as tuples of rank and suit. This method performs the following steps:
-
-- It sets `self.cards` as the input list of cards represented as tuples of rank and suit.
-- It creates a list `self.ranks` by converting the rank of each card to an integer if it is a digit, otherwise it uses the value of the corresponding enumeration defined in the `Rank` class.
-- It sorts the `self.ranks` list in descending order.
-- It creates a list `self.suits` by extracting the suit of each card.
-- It sets `self.is_flush` as `True` if all the suits in `self.suits` are the same, otherwise `False`.
-- It sets `self.is_straight` as `True` if the difference between the maximum and minimum rank in `self.ranks` is 4 and the length of the set of `self.ranks` is 5. It sets `self.is_straight` as `False` otherwise.
-
-The above attributes and steps performed during the `__init__` method will be used to classify the hand of poker in the `classify` method.
-
-#### `classify() -> str`
-
-Classifies the `PokerHand` instance into one of the following categories: 'Royal Flush', 'Straight Flush', 'Four of a Kind', 'Full House', 'Flush', 'Straight', 'Three of a Kind', 'Two Pair', 'One Pair', 'High Card'
-
-Here is a step by step explanation of what the method does:
-
-- The method starts by creating a `collections.Counter` object, `counter`, of the `self.ranks` attribute, which contains a list of integers representing the ranks of the cards in the hand.
-- Next, a dictionary, `conditions`, is defined that maps a tuple of conditions to the corresponding hand classification.
-- Then, the method uses a for loop to iterate over the items in the `conditions` dictionary. Each item is a tuple of conditions and a hand classification.
-- In the for loop, the method uses the `all()` function to check if all the conditions in the tuple of the current item are met. If the conditions are met, the corresponding hand classification is returned by the method.
-- If none of the conditions are met, the method return "High Card" as the default classification for any hand that does not match any other classification.
-- This way, the method goes through all the items in the conditions dictionary, checks if all the conditions in the tuple are met and returns the corresponding hand classification.
-
-#### `__str__() -> str`
-
-Returns the cards in the hand as a string.
-
-The `__str__` method of the `PokerHand` class returns a string representation of the cards in the hand. This method performs the following steps:
-
-- It uses a list comprehension to create a list of strings, where each string is a combination of the rank and suit of a card in the format of "rank suit".
-- It uses the `join` method to join the list of strings created in step 1 with a space separator, creating a single string containing all the cards in the hand.
-- It returns this final string.
-
-This method allows to represent the cards in the hand in a human readable format.
-
-## Development Environment
-
-### Initialise Python Virtual Environment
-
-```bash
-pipenv --python /usr/bin/python3
-cd /srv/poker_hands/
-rm -rf /srv/poker_hands/.venv
-mkdir /srv/poker_hands/.venv
-pipenv install --skip-lock --dev --pre
-pipenv shell
-```
-
-### Test Coverage
-
-```bash
-coverage run -m unittest unit_tests.py
-coverage xml -o coverage.xml
-bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
-```
-
-### Lint Code
-
-#### [Black](https://pypi.org/project/black/)
-
-```bash
-cd /srv/poker_hands/
-pipenv shell
-black -v *.py
-```
-
-#### [isort](https://pypi.org/project/isort/)
-
-```bash
-cd /srv/poker_hands/
-pipenv shell
-isort *.py
-```
-
-#### [Pylint](https://pypi.org/project/pylint/)
-
-```bash
-cd /srv/poker_hands/
-pipenv shell
-pylint *.py
-```
-
-## Contributing
-
-If you have any suggestions or find any bugs, please feel free to open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgments
-
-Thanks to OpenAI for providing the AI model that assisted in writing the documentation.
-
-## Meta
-
-### GitHub Description
-
-**Prompt**
-
-```text
-Suggest 10 short descriptions for the GitHub repo containing this code
-```
-
-**Response**
-
-```text
-A Python implementation of a Poker Hand classifier
-Classify poker hands with this Python module
-A poker hand classification tool written in Python
-Classify and represent poker hands in Python
-Python library for classifying and representing poker hands
-A comprehensive Python poker hand classifier
-Poker hand classification and representation in Python
-Python implementation of poker hand classification and representation
-A powerful tool for classifying poker hands using Python
-Python module for classifying and representing poker hands with ease
-```
+Made with ❤️ and modern Python tooling

@@ -23,10 +23,10 @@ jobs:
       run: pip install ruff
 
     - name: Check code formatting with Ruff
-      run: ruff format --check *.py
+      run: ruff format --check .
 
     - name: Lint with Ruff
-      run: ruff check *.py
+      run: ruff check .
 
   test:
     name: Test (Python ${{ matrix.python-version }})
@@ -44,37 +44,46 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Cache pip packages
+    - name: Install uv
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Add uv to PATH
+      run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Cache uv packages
       uses: actions/cache@v4
       with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-py${{ matrix.python-version }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
         restore-keys: |
-          ${{ runner.os }}-py${{ matrix.python-version }}-pipenv-
-
-    - name: Install pipenv
-      run: pip install pipenv
+          ${{ runner.os }}-uv-
 
     - name: Install dependencies
-      run: pipenv install --python $(which python) --dev --skip-lock --pre
+      run: uv sync --dev --extra api
 
-    - name: Run unit tests
-      run: pipenv run python -m unittest unit_tests.py
+    - name: Run all tests
+      run: |
+        uv run python -m unittest unit_tests.py
+        uv run python -m unittest tests.test_core
+        uv run python -m unittest tests.test_properties
+        uv run python -m unittest tests.test_api
 
     - name: Run tests with coverage (Python 3.11 only)
       if: matrix.python-version == '3.11'
-      run: pipenv run coverage run -m unittest unit_tests.py
+      run: |
+        uv run --with coverage coverage run --source=core,api -m unittest tests.test_core tests.test_properties tests.test_api
+        uv run --with coverage coverage run --append -m unittest unit_tests.py
 
     - name: Generate coverage report
       if: matrix.python-version == '3.11'
       run: |
-        pipenv run coverage report
-        pipenv run coverage xml -o coverage.xml
+        uv run --with coverage coverage report
+        uv run --with coverage coverage xml -o coverage.xml
 
-    - name: Check coverage thresholds
+    - name: Check coverage thresholds (Core library)
       if: matrix.python-version == '3.11'
       run: |
-        pipenv run coverage report --fail-under=90
+        uv run --with coverage coverage report --fail-under=90
 
     - name: Upload coverage to Codacy
       if: matrix.python-version == '3.11' && github.event_name == 'push'
@@ -106,16 +115,28 @@ jobs:
       with:
         python-version: "3.11"
 
-    - name: Install pipenv
-      run: pip install pipenv
+    - name: Install uv
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Add uv to PATH
+      run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
     - name: Install dependencies
-      run: pipenv install --python $(which python) --skip-lock --pre
+      run: uv sync --extra api
 
     - name: Test CLI imports and basic functionality
       run: |
-        # Test that the CLI can be imported and shows help
-        pipenv run python -c "import poker_hand_cli; print('CLI module imports successfully')"
+        # Test legacy CLI module
+        uv run python -c "import poker_hand_cli; print('Legacy CLI imports successfully')"
 
-        # Test that poker_hand module works
-        pipenv run python -c "from poker_hand import PokerHand, Rank; hand = PokerHand([('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]); print(f'Test hand: {hand.classify()}')"
+        # Test backward-compatible API
+        uv run python -c "from poker_hand import PokerHand, Rank; hand = PokerHand([('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]); print(f'Legacy API: {hand.classify()}')"
+
+        # Test new core library API
+        uv run python -c "from core import Card, Hand, HandClassifier; cards = [Card(rank=r, suit=s) for r, s in [('A', 'H'), ('K', 'H'), ('Q', 'H'), ('J', 'H'), ('T', 'H')]]; hand = Hand(cards=cards); result = HandClassifier.classify(hand); print(f'Core API: {result}')"
+
+        # Test new CLI module
+        uv run python -c "from cli.cli import main; print('New CLI imports successfully')"
+
+        # Test FastAPI app
+        uv run python -c "from api.main import app; print(f'FastAPI app created: {app.title}')"

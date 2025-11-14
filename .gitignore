@@ -583,6 +583,7 @@ logs/
 *.pid
 *.seed
 *.lock
+!uv.lock
 *.bak
 *.backup
 *.old
